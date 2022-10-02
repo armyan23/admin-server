@@ -1,12 +1,12 @@
 import { Router } from "express";
 
-import registerController from "../controllers/registerController";
+import RegisterController from "../controllers/registerController";
 import validRegister from "../middleware/validRegister";
 
 const router = Router();
 
-router.post("/user", validRegister, registerController.createUser)
-router.get("/user", registerController.getUser)
+router.post("/register", validRegister, RegisterController.register)
+router.post("/verify", RegisterController.verifyUser)
 
 
 export default router;

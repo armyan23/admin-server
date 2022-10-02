@@ -2,11 +2,12 @@ import bcrypt from "bcrypt";
 import sendMail from "../api/mail";
 
 import db from "../../models/index"
+import authCode from "../helper/authCode";
 
 
-class register {
+class RegisterController {
 
-    async createUser(req:any, res:any){
+    async register(req:any, res:any){
 
         try{
             const email = await db.User.findOne({ where: { email: req.body.email } });
@@ -27,59 +28,89 @@ class register {
                 password: bcryptPassword,
             }
 
-            // // SEND EMAIL MESSAGE
-            // sendMail(req.body.email,"Confirm code","1234",  (err: any, data: any)=>{
-            //     if (err){
-            //         res.status(500).json({ message: "Error"})
-            //     } else {
-            //         res.status(200).json({
-            //             message: "Email send",
-            //             data
-            //         })
-            //     }
-            // })
-
             const user = await db.User.create(newUser);
             await user.save()
-            console.log(user.id)
+
             const verify = await user.setVerify(new db.VerifyEmail({
-                // Verify id maybe make user_id ???
-                // user_id: user.id,
                 email: user.email,
-                code: 123,
-                // /// Issue. It's not working automatic!
-                // createdAt: "2022-10-02 01:49:44.368+04",
-                // updatedAt: "2022-10-02 01:49:44.368+04",
+                // code: authCode(),
+                code: 1234,
             }))
 
-            res.status(200).send({
+            await RegisterController.sendMessage(verify, res, {
                 message: "Verification code has been send in your email!",
                 user,
                 verify
-            });
+            })
         }catch (error: any){
             console.log(error)
-            res.status(403).send({
+            return  res.status(403).send({
                 status: 403,
                 message: error.message || "Error",
             })
         }
     }
 
-    async getUser(req: any, res: any){
+    async verifyUser(req: any, res: any){
 
         try{
+            const {code, email} = req.body
+            // const users = await db.User.findAll({});
+            const verify = await db.VerifyEmail.findOne({ where: { email } });
 
-            const users = await db.User.findAll({});
-            console.log(users)
-            res.status(200).send(users);
+            if(!verify){
+                return res.status(200).send({
+                    message: "Doesn't have verification this mail.",
+                });
+            }else if(verify?.code === "isActive"){
+                return res.status(200).send({
+                    message: "You already verified.",
+                });
+            }else if (verify?.code === code){
+                await db.User.update(
+                      { is_verify: new Date() },
+                    { where: {email} }
+                )
+                verify.code = "isActive";
+                await verify.save()
+                // DELETE this row
+                // await db.VerifyEmail.destroy({ where: { email } })
+
+                return res.status(200).send({
+                    status: 200,
+                    message: "You are verified",
+                    verify
+
+                });
+            }else {
+                return res.status(200).send({
+                    message: "Your code is no correct",
+                });
+            }
+
         }catch (err){
             console.error(err)
-            res.status(403).send("Server Error")
+            return res.status(403).send("Server Error")
         }
+    }
+
+    static async sendMessage(verify: any, res: any, message: object){
+        try {
+            sendMail(verify.email,"Confirm code", verify.code,  (err: any, data: any) => {
+                if (err){
+                    return res.status(500).json({ message: "Error"})
+                } else {
+                    return res.status(200).json(message)
+                }
+            })
+        }catch (err){
+            console.error(err)
+            return res.status(403).send("Server Error")
+        }
+
     }
 
 }
 
 
-export default new register();
+export default new RegisterController();

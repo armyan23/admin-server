@@ -3,11 +3,10 @@
 import {Model, UUIDV4} from 'sequelize';
 
 interface IUserAttributes {
-    id: string,
     name: string,
     email: string,
     password: string,
-    isActive: boolean,
+    is_verify: Date,
     createdAt: Date,
     updatedAt: Date
 }
@@ -21,16 +20,21 @@ module.exports = (sequelize: any, DataTypes: any) => {
          * This method is not a part of Sequelize lifecycle.
          * The `models/index` file will call this method automatically.
          */
-        id!: string;
         name!: string;
         email!: string;
         password!: string;
-        isActive!: boolean;
+        is_verify!: Date;
         createdAt!: Date;
         updatedAt!: Date
 
         static associate(models: any) {
             // define association
+            User.hasOne(models.VerifyEmail,{
+                as: "Verify",
+                foreignKey: "user_id"
+            })
+            //ete verifyic uzer chenq uzena vercnel apa petq che nerqevi toxy grel
+            // models.verifyEmail.hasOne(User,{as: "User"})
             User.belongsToMany(models.Project, {
                 through: "ProjectAssignments"
             })
@@ -38,12 +42,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
     }
 
     User.init({
-        id:{
-            type: DataTypes.UUID,
-            defaultValue: UUIDV4,
-            allowNull: false,
-            primaryKey: true,
-        },
         name: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -51,15 +49,30 @@ module.exports = (sequelize: any, DataTypes: any) => {
         email:{
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
+            unique: {
+                name: "email",
+                msg: "Email address already in use!"
+            },
+            validate: {
+                isEmail: {
+                    msg: "Email don't valid!"
+                }
+            }
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
+            validate: {
+                min: {
+                    args: [6],
+                    msg: "Password must be more than 6 characters!"
+                },
+
+            }
         },
-        isActive: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false
+        is_verify: {
+            type: DataTypes.DATE,
+            allowNull: true,
         },
         createdAt: {
             type: DataTypes.DATE,

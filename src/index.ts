@@ -1,62 +1,31 @@
-import express, { Express, NextFunction, Request, Response } from 'express';
-import dotenv from 'dotenv';
+import express from "express";
 import cors from "cors";
-import path from 'path';
+import router from "./api/index";
+import dotenv from "dotenv";
+// import routerDashboard from "./routes/dashboard"
 
-import { ArgumentNode } from 'graphql';
-import { graphqlHTTP } from "express-graphql";
-import schema from "./schema/schema";
-import { users } from "./api/users";
+const main =async () => {
 
-const app: Express = express();
-const port = process.env.PORT; // 8000
+    const app = express();
+    dotenv.config();
 
-dotenv.config();
-app.use(cors());
+    //Middleware
+    app.use(cors());
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+    //Router
+    app.use("/api", router)
+    // app.use("/api/dashboard", routerDashboard)
 
-const root = {
-    // getAllUsers: () => users,
-    loginUsers: ({ id }: any) => {
-        return 5
-    },
-    ip: () => 'Hello World!'
-};
-
-const loggingMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    console.log('ip:', req.ip);
-    next();
-}
-app.use(loggingMiddleware);
-
-app.use(
-    "/graphql",
-    graphqlHTTP({
-        graphiql: true,
-        schema,
-        rootValue: root,
+    // Server
+    app.listen(process.env.SERVER_PORT,() => {
+        console.log(`⚡️[server]: Server is running at ${process.env.SERVER_HOST}${process.env.SERVER_PORT}`);
     })
-);
+}
+
+main().catch(err => {
+    console.log(err);
+})
 
 
-// ROUTERS
-
-// app.use(express.static('assets/person'));
-// app.use(express.static('public'));
-// app.use('/static', express.static(path.join(__dirname, 'public')));
-
-app.get('/', (req: Request, res: Response) => {
-    res.send(`Express + TypeScript Server`);
-});
-
-app.listen(8000, (): void => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
-});
-
-
-
-
-
-
-
-
-
+// Need turn on sequelize Type end user
