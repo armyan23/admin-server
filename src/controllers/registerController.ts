@@ -1,14 +1,13 @@
 import bcrypt from "bcrypt";
-import sendMail from "../api/mail";
+import sendMail from "../utils/mail";
 
 import db from "../../models/index"
-import authCode from "../helper/authCode";
+import authCode from "../utils/authCode";
 
 
 class RegisterController {
 
     async register(req:any, res:any){
-
         try{
             const email = await db.User.findOne({ where: { email: req.body.email } });
 
@@ -36,11 +35,17 @@ class RegisterController {
                 // code: authCode(),
                 code: 1234,
             }))
+            // TODO: CHECK THIS PART
+            const details = await user.setDetails(new db.UserDetails({
+                firstName: "Example",
+                lastName: "Example 2",
+            }))
 
             await RegisterController.sendMessage(verify, res, {
                 message: "Verification code has been send in your email!",
                 user,
-                verify
+                verify,
+                details
             })
         }catch (error: any){
             console.log(error)
@@ -52,7 +57,6 @@ class RegisterController {
     }
 
     async verifyUser(req: any, res: any){
-
         try{
             const {code, email} = req.body
             // const users = await db.User.findAll({});
@@ -80,7 +84,6 @@ class RegisterController {
                     status: 200,
                     message: "You are verified",
                     verify
-
                 });
             }else {
                 return res.status(200).send({
@@ -93,7 +96,50 @@ class RegisterController {
             return res.status(403).send("Server Error")
         }
     }
+    async getUser(req: any, res: any){
+        try{
+            const {id} = req.body
+            // const users = await db.User.findAll({});
+            const user = await db.User.findOne({ where: { id },
+                include:["Details","Verify"]
+            });
 
+            if(user){
+
+            // }else if(verify?.code === "isActive"){
+            //     return res.status(200).send({
+            //         message: "You already verified.",
+            //     });
+            // }else if (verify?.code === code){
+            //     await db.User.update(
+            //         { is_verify: new Date() },
+            //         { where: {email} }
+            //     )
+            //     verify.code = "isActive";
+            //     await verify.save()
+            //     // DELETE this row
+            //     // await db.VerifyEmail.destroy({ where: { email } })
+            //
+                return res.status(200).send({
+                    status: 200,
+                    message: "",
+                    user
+                });
+            }else {
+                return res.status(200).send({
+                    message: "No such user",
+                });
+            }
+
+        }catch (err){
+            console.error(err)
+            return res.status(403).send({
+                status: 403,
+                message: "Server Error"
+            })
+        }
+    }
+    // Move Helper or other place SendMessage
     static async sendMessage(verify: any, res: any, message: object){
         try {
             sendMail(verify.email,"Confirm code", verify.code,  (err: any, data: any) => {
@@ -105,7 +151,10 @@ class RegisterController {
             })
         }catch (err){
             console.error(err)
-            return res.status(403).send("Server Error")
+            return res.status(403).send({
+                status: 403,
+                message: "Server Error"
+            })
         }
 
     }

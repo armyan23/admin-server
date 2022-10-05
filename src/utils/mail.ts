@@ -47,5 +47,4 @@ const sendMail = (email: string, subject: string, text: string, cb: any) => {
     })
 }
 
-
 export default sendMail;

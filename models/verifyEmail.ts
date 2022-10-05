@@ -1,15 +1,15 @@
 'use strict';
 import {Model} from 'sequelize';
 
-interface IUserAttributes {
+interface IVerifyAttributes {
     user_id: number,
     email: string,
     code: string,
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
-    class VerifyEmail extends Model<IUserAttributes>
-        implements IUserAttributes{
+    class VerifyEmail extends Model<IVerifyAttributes>
+        implements IVerifyAttributes{
 
         user_id!: number;
         email!: string;
@@ -52,9 +52,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
                 }
             }
         },
+
     }, {
         sequelize,
-        tableName: "verify",
+        tableName: "verifies",
         timestamps: false
     });
 

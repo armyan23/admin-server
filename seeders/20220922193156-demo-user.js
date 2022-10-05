@@ -2,57 +2,52 @@
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.bulkInsert(
-            'users',
-            [
-                {
-                    id:  "6d9cd6ac-a089-4cce-992b-18eb544328bf",
-                    name: 'user1',
-                    email: 'user1@test.com',
-                    password: "55",
-                    create_at: new Date(),
-                    updated_at: new Date()
-                },
-                {
-                    id: "faf96fb7-27e4-447e-98ed-c670ce1785d4",
-                    name: 'user2',
-                    email: 'user2@test.com',
-                    password: "55",
-                    create_at: new Date(),
-                    updated_at: new Date()
-
-                },
-                {
-                    id: "40191fde-d784-4ddb-842f-bff0286d8cef",
-                    name: 'user3',
-                    email: 'user3@test.com',
-                    password: "55",
-                    create_at: new Date(),
-                    updated_at: new Date()
-                },
-            ],
-            {}
-        );
+        // CREATED USER
         // await queryInterface.bulkInsert(
-        //     'channel',
+        //     'users',
         //     [
         //         {
-        //             id: 1,
-        //             name: 'channel1',
-        //             user_id: 1,
+        //             id:  "6d9cd6ac-a089-4cce-992b-18eb544328bf",
+        //             name: 'user1',
+        //             email: 'user1@test.com',
+        //             password: "55",
         //             create_at: new Date(),
-        //             updated_at: new Date(),
+        //             updated_at: new Date()
         //         },
         //         {
-        //             id: 2,
-        //             name: 'channel2',
-        //             user_id: 2,
+        //             id: "faf96fb7-27e4-447e-98ed-c670ce1785d4",
+        //             name: 'user2',
+        //             email: 'user2@test.com',
+        //             password: "55",
         //             create_at: new Date(),
-        //             updated_at: new Date(),
+        //             updated_at: new Date()
+        //
+        //         },
+        //         {
+        //             id: "40191fde-d784-4ddb-842f-bff0286d8cef",
+        //             name: 'user3',
+        //             email: 'user3@test.com',
+        //             password: "55",
+        //             create_at: new Date(),
+        //             updated_at: new Date()
         //         },
         //     ],
         //     {}
         // );
+        await queryInterface.bulkInsert(
+            'gender',
+            [
+                {
+                    id: 1,
+                    type: "male"
+                },
+                {
+                    id: 2,
+                    type: "female"
+                },
+            ],
+            {}
+        );
         //
         // await queryInterface.bulkInsert(
         //     'video',

@@ -35,12 +35,3 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 export default db;
-// db.user = require("./user.ts")(sequelize,DataTypes)
-// db.verifyEmail = require("./verifyEmail.ts")(sequelize,DataTypes)
-
-// db.sequelize.sync({force:false})
-//     .then(() => {
-//       console.log("Yes re-sync done")
-// })
-
-// module.exports = db;
