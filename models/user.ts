@@ -6,7 +6,6 @@ interface IUserAttributes {
     name: string,
     email: string,
     password: string,
-    // gender: number,
     is_verify: Date,
     createdAt: Date,
     updatedAt: Date
@@ -24,7 +23,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
         name!: string;
         email!: string;
         password!: string;
-        // gender!: number;
         is_verify!: Date;
         createdAt!: Date;
         updatedAt!: Date
@@ -39,11 +37,16 @@ module.exports = (sequelize: any, DataTypes: any) => {
                 as: "Details",
                 foreignKey: "user_id"
             })
+            // TODO: hasMany DONT WORK
+            User.hasMany(models.CompanyDetails,{
+                as: "Company",
+                foreignKey: "user_id"
+            })
             // User.hasOne(models.UserDetails,{
             //     as: "Details",
             //     foreignKey: "user_id"
             // })
-            //ete verifyic uzer chenq uzena vercnel apa petq che nerqevi toxy grel
+            // /// ete verifyic uzer chenq uzena vercnel apa petq che nerqevi toxy grel
             // models.verifyEmail.hasOne(User,{as: "User"})
             // User.belongsToMany(models.Project, {
             //     through: "ProjectAssignments"
@@ -80,10 +83,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
             }
         },
-        // gender: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false,
-        // },
         is_verify: {
             type: DataTypes.DATE,
             allowNull: true,

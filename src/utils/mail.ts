@@ -21,14 +21,14 @@ const sendMail = (email: string, subject: string, text: string, cb: any) => {
     const transporter = nodemailer.createTransport({
         host: 'smtp.mail.ru',
         port: 465,
-        secure: true, // Only True if  port === 465
-        //FROM
+        secure: true, //  Only True if  port === 465
+        // /// FROM
         auth: {
             user: 'arm.davtyan1029@mail.ru',
             // pass: 'Adm1nEmp10ee'
             pass: 'r3BMiz6qwgfLMV2Lg9AE'
         },
-        // OUTLOOK MICROSOFT
+        // ///OUTLOOK MICROSOFT
         // host: 'smtp-mail.outlook.com',
         // port: 587,
         // secure: false, // Only True if  port === 465

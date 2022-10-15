@@ -7,11 +7,12 @@
     "start": "node ./dist/index.js",
     "dev": "nodemon ./src/index.ts",
     "build": "tsc -p .",
-    "make-model": "npx sequelize-cli model:generate --name compony --attributes email:string",
+    "make-model": "npx sequelize-cli model:generate --name company --attributes email:string",
     "make-seed": "npx sequelize-cli seed:generate --name demo-user",
     "seed": "npx sequelize-cli db:seed:all",
+    "seed:undo": "npx sequelize-cli db:seed:undo",
     "migrate": "npx sequelize-cli db:migrate",
-    "down": "npx sequelize-cli db:migrate:undo"
+    "down": "npx sequelize-cli db:migrate:undo:all"
   },
   "author": "",
   "license": "ISC",
