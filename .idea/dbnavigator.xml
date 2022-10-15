@@ -34,7 +34,9 @@
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files>
+      <object connection-id="76375bae-da3e-403e-90b4-c94f4965993d" object-ref="schemas/public/tables/users" />
       <object connection-id="76375bae-da3e-403e-90b4-c94f4965993d" object-ref="schemas/public/tables/user_details" />
+      <object connection-id="76375bae-da3e-403e-90b4-c94f4965993d" object-ref="schemas/public/tables/companies" />
     </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
@@ -52,9 +54,6 @@
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
-  </component>
-  <component name="DBNavigator.Project.FileConnectionMappingManager">
-    <mapping file-url="file://$PROJECT_DIR$/src/database/authTest.sql" connection-id="089b6c44-a781-4286-b539-17ff88b31e70" session-id="MAIN" current-schema="public" />
   </component>
   <component name="DBNavigator.Project.MethodExecutionManager">
     <method-browser />
