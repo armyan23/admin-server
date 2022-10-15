@@ -33,13 +33,16 @@
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="76375bae-da3e-403e-90b4-c94f4965993d" object-ref="schemas/public/tables/companies" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="76375bae-da3e-403e-90b4-c94f4965993d" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-actions connection-id="76375bae-da3e-403e-90b4-c94f4965993d" dataset="public.users" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="76375bae-da3e-403e-90b4-c94f4965993d" dataset="public.companies" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="76375bae-da3e-403e-90b4-c94f4965993d" dataset="public.verifies" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="76375bae-da3e-403e-90b4-c94f4965993d" dataset="public.SequelizeMeta" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="76375bae-da3e-403e-90b4-c94f4965993d" dataset="public.user_details" active-filter-id="EMPTY_FILTER" />
