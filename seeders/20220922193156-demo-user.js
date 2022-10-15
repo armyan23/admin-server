@@ -34,20 +34,20 @@ module.exports = {
         //     ],
         //     {}
         // );
-        await queryInterface.bulkInsert(
-            'gender',
-            [
-                {
-                    id: 1,
-                    type: "male"
-                },
-                {
-                    id: 2,
-                    type: "female"
-                },
-            ],
-            {}
-        );
+        // await queryInterface.bulkInsert(
+        //     'gender',
+        //     [
+        //         {
+        //             id: 1,
+        //             type: "male"
+        //         },
+        //         {
+        //             id: 2,
+        //             type: "female"
+        //         },
+        //     ],
+        //     {}
+        // );
         //
         // await queryInterface.bulkInsert(
         //     'video',
