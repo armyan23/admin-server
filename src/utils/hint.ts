@@ -37,3 +37,69 @@
 //4. Give them the jwt token
 //   const token = jwtGenerator(user.rows[0].user_id);
 //   res.json({token})
+
+
+
+
+// EXAMPLE
+// async getUser(req: any, res: any){
+//     try{
+//         const {id} = req.body
+//         // const users = await db.User.findAll({});
+//         const user = await db.User.findOne({ where: { id },
+//             include:[
+//                 "Details",
+//                 // "Verify"
+//             ]
+//         });
+//
+//         if(user){
+//             return res.status(200).send({
+//                 status: 200,
+//                 message: "",
+//                 data: user
+//             });
+//         }else {
+//             return res.status(200).send({
+//                 message: "No such user",
+//             });
+//         }
+//
+//     }catch (err){
+//         console.error(err)
+//         return res.status(500).send({
+//             status: 500,
+//             message: "Server Error"
+//         })
+//     }
+// }
+
+
+//
+// async getUserInfo(req: any, res: any){
+//     try{
+//         const {id} = req.body
+//         // const users = await db.User.findAll({});
+//         const user = await db.User.findOne({ where: { id }});
+//         console.log(user);
+//
+//         if(user){
+//             return res.status(200).send({
+//                 status: 200,
+//                 message: "",
+//                 data: user
+//             });
+//         }else {
+//             return res.status(200).send({
+//                 message: "No such user",
+//             });
+//         }
+//
+//     }catch (err){
+//         console.error(err)
+//         return res.status(500).send({
+//             status: 500,
+//             message: "Server Error"
+//         })
+//     }
+// }

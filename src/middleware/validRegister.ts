@@ -4,15 +4,15 @@ import {
 } from "../helper/valid";
 
 async function validRegister(req: any, res: any, next: Function) {
-    const { email, name, password, confirmPassword } = req.body;
+    const { email, password, confirmPassword } = req.body;
 
     const validInfoEmail = validCheckEmail(email);
     const validInfoPassword = validCheckPassword(password, confirmPassword);
 
     // TODO: CREATE EVERY BOOLEAN GLOBAL FUNCTION
-    if (![email, name, password, confirmPassword].every(Boolean)) {
-        return res.status(401).json({
-            status: 401,
+    if (![email, password, confirmPassword].every(Boolean)) {
+        return res.status(400).json({
+            status: 400,
             message:"Missing Credentials!"
         });
     }else if (validInfoEmail) {

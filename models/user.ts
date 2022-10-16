@@ -3,7 +3,7 @@
 import {Model, UUIDV4} from 'sequelize';
 
 interface IUserAttributes {
-    name: string,
+    role: string,
     email: string,
     password: string,
     is_verify: Date,
@@ -20,7 +20,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
          * This method is not a part of Sequelize lifecycle.
          * The `models/index` file will call this method automatically.
          */
-        name!: string;
+        role!: string;
         email!: string;
         password!: string;
         is_verify!: Date;
@@ -55,7 +55,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     }
 
     User.init({
-        name: {
+        role: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -99,7 +99,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
         sequelize,
         tableName: "users",
     });
-
 
     return User;
 };
