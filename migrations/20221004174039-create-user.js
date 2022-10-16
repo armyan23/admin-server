@@ -11,7 +11,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         autoIncrement: true,
       },
-      name: {
+      role: {
         type: Sequelize.STRING,
         allowNull: false,
       },

@@ -15,34 +15,32 @@ interface ICompanyAttributes {
 module.exports = (sequelize: any, DataTypes: any) => {
   class CompanyDetails extends Model<ICompanyAttributes>
       implements ICompanyAttributes{
+        /**
+             * Helper method for defining associations.
+             * This method is not a part of Sequelize lifecycle.
+             * The `models/index` file will call this method automatically.
+             */
+        user_id!: number;
+        nameCompany!: string;
+        aboutCompany!: string;
+        typeCompany!: string;
+        phoneNumber!: string;
+        email!: string;
+        website!: string;
+        createdAt!: Date;
 
-    user_id!: number;
-    nameCompany!: string;
-    aboutCompany!: string;
-    typeCompany!: string;
-    phoneNumber!: string;
-    email!: string;
-    website!: string;
-    createdAt!: Date;
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-
-    static associate(models: any) {
-      // define association
-      // CompanyDetails.belongsTo(models.User,{
-      //     as: "Verify"
-      // })
-    }
+        static associate(models: any) {
+          // define association
+          // CompanyDetails.belongsTo(models.User,{
+          //     as: "Verify"
+          // })
+        }
   }
 
   CompanyDetails.init({
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       unique: true,
     },
     nameCompany: {
@@ -78,7 +76,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
     tableName: "companies",
     timestamps: false
   });
-
 
   return CompanyDetails;
 };

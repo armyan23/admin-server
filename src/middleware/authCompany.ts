@@ -5,13 +5,15 @@ dotenv.config();
 
 async function authorization(req:any, res:any, next:any){
     try{
-        const jwtToken = req.header("token");
-        if (!jwtToken){
-            return res.status(403).send("Not Authorization!");
+        const companyToken = req.header("companyToken");
+
+        if (!companyToken){
+            return res.status(403).send({
+                message: "Not Authorization!"
+            });
         }
 
-        const payload: any = jwt.verify(jwtToken, `${process.env.JWT_SECRET}`);
-
+        const payload: any = jwt.verify(companyToken, `${process.env.JWT_SECRET}`);
         req.id = payload.id;
 
         next()

@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-function jwtGenerator(user_id : string){
+export function jwtGenerator(id : string){
     const payload = {
-        user: user_id
+        id
     }
 
     return jwt.sign(payload, `${process.env.JWT_SECRET}`,{ expiresIn: 60 * 60}); // or 1hr
