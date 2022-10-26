@@ -5,6 +5,8 @@ interface IVerifyAttributes {
     user_id: number,
     email: string,
     code: string,
+    createdAt: Date,
+    updatedAt: Date
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -14,6 +16,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
         user_id!: number;
         email!: string;
         code!: string;
+        createdAt!: Date;
+        updatedAt!: Date;
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -52,11 +56,19 @@ module.exports = (sequelize: any, DataTypes: any) => {
                 }
             }
         },
-
+        createdAt: {
+            allowNull: false,
+            type: DataTypes.DATE,
+            field: 'created_at'
+        },
+        updatedAt: {
+            allowNull: false,
+            type: DataTypes.DATE,
+            field: 'updated_at'
+        }
     }, {
         sequelize,
         tableName: "verifies",
-        timestamps: false
     });
 
 

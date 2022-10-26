@@ -11,7 +11,7 @@ module.exports = {
           model: "users",
           key: "id"
         },
-        onDelete: "cascade"
+        // onDelete: "cascade"
       },
       first_name: {
         type: Sequelize.STRING,
@@ -34,8 +34,14 @@ module.exports = {
       birth_date  : {
         type: Sequelize.DATE,
       },
-    },{
-      timestamps: false
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      }
     });
   },
   async down(queryInterface, Sequelize) {

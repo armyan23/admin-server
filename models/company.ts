@@ -1,15 +1,17 @@
 'use strict';
-import {Model} from 'sequelize';
+import {Model, UUIDV4} from 'sequelize';
 
 interface ICompanyAttributes {
-  user_id: number,
-  nameCompany: string,
-  aboutCompany: string,
-  typeCompany: string,
-  phoneNumber: string,
-  email: string,
-  website: string,
-  createdAt: Date,
+    id: string,
+    user_id: number,
+    nameCompany: string,
+    aboutCompany: string,
+    typeCompany: string,
+    phoneNumber: string,
+    email: string,
+    website: string,
+    createdAt: Date,
+    updatedAt: Date,
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -20,6 +22,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
              * This method is not a part of Sequelize lifecycle.
              * The `models/index` file will call this method automatically.
              */
+        id!: string;
         user_id!: number;
         nameCompany!: string;
         aboutCompany!: string;
@@ -28,16 +31,31 @@ module.exports = (sequelize: any, DataTypes: any) => {
         email!: string;
         website!: string;
         createdAt!: Date;
+        updatedAt!: Date;
 
         static associate(models: any) {
+
+            // const { Employee, CompanyRefPerson } = models;
           // define association
           // CompanyDetails.belongsTo(models.User,{
           //     as: "Verify"
           // })
+          //   CompanyDetails.belongsToMany(Employee,{
+          //       as: "EmployeeRef",
+          //       through: CompanyRefPerson,
+          //       foreignKey: "company_id",
+          //       // otherKey: "person_id"
+          //   })
         }
   }
 
   CompanyDetails.init({
+    id:{
+      type: DataTypes.UUID,
+      defaultValue: UUIDV4,
+      allowNull: false,
+      primaryKey: true,
+    },
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -68,13 +86,18 @@ module.exports = (sequelize: any, DataTypes: any) => {
       type: DataTypes.STRING,
     },
     createdAt: {
+      allowNull: false,
       type: DataTypes.DATE,
-      field: "created_at"
+      field: 'created_at'
     },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      field: 'updated_at'
+    }
   }, {
     sequelize,
     tableName: "companies",
-    timestamps: false
   });
 
   return CompanyDetails;

@@ -67,10 +67,14 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       },
-      updatedAt: {
+      updated_at: {
+        allowNull: false,
         type: Sequelize.DATE,
-        allowNull: false
-      }
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {

@@ -1,6 +1,6 @@
 'use strict';
 
-import {Model, UUIDV4} from 'sequelize';
+import {Model} from 'sequelize';
 
 interface IUserAttributes {
     role: string,
@@ -29,16 +29,16 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
         static associate(models: any) {
             // define association
-            User.hasOne(models.VerifyEmail,{
+            this.hasOne(models.VerifyEmail,{
                 as: "Verify",
                 foreignKey: "user_id"
             })
-            User.hasOne(models.UserDetails,{
+            this.hasOne(models.UserDetails,{
                 as: "Details",
                 foreignKey: "user_id"
             })
             // TODO: hasMany DONT WORK
-            User.hasMany(models.CompanyDetails,{
+            this.hasMany(models.CompanyDetails,{
                 as: "Company",
                 foreignKey: "user_id"
             })

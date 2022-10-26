@@ -6,9 +6,9 @@
 //
 // router.get("/", authorization, async (req: any, res: any)=>{
 //     try {
-//         // req.user has the payload
+//         // req.id has the payload
 //
-//         const user = await db.query(`SELECT * FROM users_test WHERE user_id = $1`, [req.user]);
+//         const user = await db.query(`SELECT * FROM users_test WHERE user_id = $1`, [req.id]);
 //         res.json(user.rows[0])
 //
 //     }catch (err){

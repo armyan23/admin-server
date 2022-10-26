@@ -25,7 +25,7 @@ class CompanyController {
 
     async getCompanies(req: any, res: any){
         try {
-            const companies = await db.CompanyDetails.findAll({where: {user_id: req.user}});
+            const companies = await db.CompanyDetails.findAll({where: {user_id: req.id}});
 
             return res.status(200).json({
                 status: 200,

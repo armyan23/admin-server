@@ -5,9 +5,9 @@ module.exports = {
     await queryInterface.createTable('companies', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        defaultValue: Sequelize.UUIDV4,
+        type: Sequelize.UUID,
       },
       name_company: {
         type: Sequelize.STRING,
@@ -30,17 +30,20 @@ module.exports = {
         type: Sequelize.STRING,
       },
       created_at: {
+        allowNull: false,
         type: Sequelize.DATE,
       },
-    },{
-      timestamps: false
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      }
     });
 
     await queryInterface.addColumn('companies', 'user_id', {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: { model: 'users', key: 'id' },
-      onDelete: "cascade"
+      // onDelete: "cascade"
     })
   },
 

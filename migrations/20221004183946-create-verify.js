@@ -11,7 +11,7 @@ module.exports = {
           model: "users",
           key: "id"
         },
-        onDelete: "cascade"
+        // onDelete: "cascade"
       },
       email: {
         type: Sequelize.STRING,
@@ -22,8 +22,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-    },{
-      timestamps: false
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
     });
 
     // await queryInterface.addConstraint("verifies",{
