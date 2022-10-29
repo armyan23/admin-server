@@ -97,7 +97,7 @@ class AuthController {
         try{
             const { email, password } = await req.body;
 
-            const user = await db.User.findOne({ where:{ email }})
+            const user = await db.User.scope('deleted').findOne({ where:{ email }})
             // 1. CHECK Valid fields in VALIDATOR
             // 2. CHECK User
             // 3. CHECK email verify or not
@@ -124,9 +124,13 @@ class AuthController {
             }
             const userToken = jwtGenerator(user.id)
 
+            const companies = await db.Company.findOne({where: {user_id: user.id}});
+            const companyToken = jwtGenerator(companies.id);
+
             return res.status(200).send({
                 status: 200,
                 message: "Sign in success.",
+                companyToken,
                 userToken,
             })
         }catch (err){

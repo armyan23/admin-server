@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-async function authorization(req:any, res:any, next:any){
+async function authCompany(req:any, res:any, next:any){
     try{
         const companyToken = req.header("companyToken");
 
@@ -14,7 +14,7 @@ async function authorization(req:any, res:any, next:any){
         }
 
         const payload: any = jwt.verify(companyToken, `${process.env.JWT_SECRET}`);
-        req.id = payload.id;
+        req.companyId = payload.id;
 
         next()
     }catch (err){
@@ -26,4 +26,4 @@ async function authorization(req:any, res:any, next:any){
     }
 }
 
-export default authorization;
+export default authCompany;

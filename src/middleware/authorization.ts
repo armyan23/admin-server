@@ -12,7 +12,7 @@ async function authorization(req:any, res:any, next:any){
 
         const payload: any = jwt.verify(jwtToken, `${process.env.JWT_SECRET}`);
 
-        req.id = payload.id;
+        req.userId = payload.id;
 
         next()
     }catch (err){

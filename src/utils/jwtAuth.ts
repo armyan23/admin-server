@@ -8,7 +8,8 @@ export function jwtGenerator(id : string){
         id
     }
 
-    return jwt.sign(payload, `${process.env.JWT_SECRET}`,{ expiresIn: 60 * 60}); // or 1hr
+    return jwt.sign(payload, `${process.env.JWT_SECRET}`,{ expiresIn: 60 * 60*5000}); // or 1hr
+    // return jwt.sign(payload, `${process.env.JWT_SECRET}`,{ expiresIn: 60 * 60}); // or 1hr
 }
 
 export default jwtGenerator;

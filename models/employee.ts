@@ -46,14 +46,14 @@ module.exports = (sequelize: any, DataTypes: any) => {
       createdAt!: Date;
       updatedAt!: Date;
       static associate(models: any) {
-        // const { CompanyRefPerson, CompanyDetails } = models;
         // define association here
-        // Employee.belongsToMany(CompanyDetails,{
-        //   as: "CompanyRef",
-        //   through: CompanyRefPerson,
-        //   foreignKey: "person_id",
-        //   // otherKey: "person_id"
-        // })
+        const { Company, Company_Employees } = models;
+
+        this.belongsToMany(Company, {
+          as: 'Company',
+          foreignKey: 'personId',
+          through: Company_Employees,
+        });
       }
     }
     Employee.init({
@@ -135,7 +135,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
     }, {
       sequelize,
-      modelName: 'employee',
+      tableName: "employees",
     });
     return Employee;
 };

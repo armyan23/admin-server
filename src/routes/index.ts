@@ -6,7 +6,7 @@ import companyRouter from "./companyRouter";
 const router = Router();
 
 router.use("/auth", authRoutes);
-router.use("/create", employeeRouter);
+router.use("/employee", employeeRouter);
 router.use("/company", companyRouter);
 
 export default router;

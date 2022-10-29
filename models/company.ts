@@ -15,7 +15,7 @@ interface ICompanyAttributes {
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
-  class CompanyDetails extends Model<ICompanyAttributes>
+  class Company extends Model<ICompanyAttributes>
       implements ICompanyAttributes{
         /**
              * Helper method for defining associations.
@@ -34,23 +34,18 @@ module.exports = (sequelize: any, DataTypes: any) => {
         updatedAt!: Date;
 
         static associate(models: any) {
-
-            // const { Employee, CompanyRefPerson } = models;
-          // define association
-          // CompanyDetails.belongsTo(models.User,{
-          //     as: "Verify"
-          // })
-          //   CompanyDetails.belongsToMany(Employee,{
-          //       as: "EmployeeRef",
-          //       through: CompanyRefPerson,
-          //       foreignKey: "company_id",
-          //       // otherKey: "person_id"
-          //   })
+            // define association here
+            const { Employee, Company_Employees } = models;
+            this.belongsToMany(Employee, {
+                as: 'Employee',
+                foreignKey: 'companyId',
+                through: Company_Employees,
+            });
         }
   }
 
-  CompanyDetails.init({
-    id:{
+  Company.init({
+    id: {
       type: DataTypes.UUID,
       defaultValue: UUIDV4,
       allowNull: false,
@@ -99,6 +94,5 @@ module.exports = (sequelize: any, DataTypes: any) => {
     sequelize,
     tableName: "companies",
   });
-
-  return CompanyDetails;
+  return Company;
 };

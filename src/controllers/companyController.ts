@@ -4,10 +4,10 @@ import jwtGenerator from "../utils/jwtAuth";
 class CompanyController {
     async createCompany(req:any, res:any){
         try{
-            await db.User.findOne({where: {id: req.id}, include: ["Details"]});
+            await db.User.findOne({where: {id: req.userId}, include: ["Details"]});
 
-            const company = await db.CompanyDetails.bulkCreate([{
-                user_id: req.id,
+            const company = await db.Company.bulkCreate([{
+                user_id: req.userId,
                 ...req.body
             }])
 
@@ -25,7 +25,7 @@ class CompanyController {
 
     async getCompanies(req: any, res: any){
         try {
-            const companies = await db.CompanyDetails.findAll({where: {user_id: req.id}});
+            const companies = await db.Company.findAll({where: {user_id: req.userId}});
 
             return res.status(200).json({
                 status: 200,
@@ -43,7 +43,7 @@ class CompanyController {
 
     async getCompany(req: any, res: any){
         try {
-            await db.CompanyDetails.findOne({ where: {id: req.param("id")}});
+            await db.Company.findOne({ where: {id: req.param("id")}});
 
             const companyToken = jwtGenerator(req.param("id"));
             return res.status(200).json({

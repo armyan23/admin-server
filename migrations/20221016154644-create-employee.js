@@ -32,7 +32,6 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true
       },
       phone_number: {
         type: Sequelize.STRING,
@@ -63,10 +62,6 @@ module.exports = {
         allowNull: false
       },
       end_work: Sequelize.DATE,
-      createdAt: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
