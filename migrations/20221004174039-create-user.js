@@ -27,6 +27,9 @@ module.exports = {
       is_verify: {
         type: Sequelize.DATE,
       },
+      deleted_at: {
+        type: Sequelize.DATE,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

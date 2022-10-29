@@ -7,6 +7,7 @@ interface IUserAttributes {
     email: string,
     password: string,
     is_verify: Date,
+    deletedAt: Date | null,
     createdAt: Date,
     updatedAt: Date
 }
@@ -24,6 +25,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         email!: string;
         password!: string;
         is_verify!: Date;
+        deletedAt!: Date | null;
         createdAt!: Date;
         updatedAt!: Date
 
@@ -38,8 +40,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
                 foreignKey: "user_id"
             })
             // TODO: hasMany DONT WORK
-            this.hasMany(models.CompanyDetails,{
-                as: "Company",
+            this.hasMany(models.Company,{
                 foreignKey: "user_id"
             })
             // User.hasOne(models.UserDetails,{
@@ -87,6 +88,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
             type: DataTypes.DATE,
             allowNull: true,
         },
+        deletedAt: {
+            type: DataTypes.DATE,
+            field: 'deleted_at'
+        },
         createdAt: {
             type: DataTypes.DATE,
             field: 'created_at'
@@ -96,6 +101,18 @@ module.exports = (sequelize: any, DataTypes: any) => {
             field: 'updated_at'
         },
     }, {
+        scopes: {
+            deleted: {
+                where: {
+                    deletedAt: null
+                }
+            },
+            activeUsers: {
+                include: [
+                    {model: User, where: {is_verify: true}}
+                ]
+            },
+        },
         sequelize,
         tableName: "users",
     });
