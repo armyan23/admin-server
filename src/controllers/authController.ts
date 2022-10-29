@@ -130,8 +130,10 @@ class AuthController {
             return res.status(200).send({
                 status: 200,
                 message: "Sign in success.",
-                companyToken,
-                userToken,
+                data: {
+                    userToken,
+                    companyToken,
+                }
             })
         }catch (err){
             console.error(err)

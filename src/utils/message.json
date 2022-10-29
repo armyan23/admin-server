@@ -3,7 +3,8 @@
     "valid": {
       "emailInvalid": "Invalid Email!",
       "emailAlreadyUse": "Email address already in use!",
-      "checkYourEmailIdentity!": "You already registry, please check your email for confirmation of your identity!"
+      "checkYourEmailIdentity!": "You already registry, please check your email for confirmation of your identity!",
+      "passwordsMatch": "Passwords did not match."
     }
   }
 }

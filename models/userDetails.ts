@@ -37,17 +37,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
         static associate(models: any) {
             // define association
-            // User.hasOne(models.VerifyEmail,{
-            //     as: "Verify",
-            //     foreignKey: "user_id"
-            // })
-            // User.hasOne(models.VerifyEmail,{
-            //     as: "Gender",
-            //     foreignKey: "user_id"
-            // })
-            // UserDetails.belongsToMany(models.Project, {
-            //     through: "ProjectAssignments"
-            // })
         }
     }
 
