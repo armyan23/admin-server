@@ -29,7 +29,7 @@ class UserController{
     async editUserPassword(req: any, res: any){
         try {
             const { password, newPassword, confirmPassword } = await req.body;
-            const user = await User.findOne({where: {id: req.userId}})
+            const user = await User.findByPk(req.userId);
 
             const validPassword = await bcrypt.compare(password, user.password);
 
@@ -68,7 +68,7 @@ class UserController{
     async editUserEmail(req: any, res: any){
         try {
             const { email } = await req.body;
-            const user = await User.findOne({where: {id: req.userId}})
+            const user = await User.findByPk(req.userId);
             // TODO: WORKING BAD (need change logic)
             user.update({
                 email: email
@@ -88,7 +88,7 @@ class UserController{
     }
     async userDelete(req: any, res: any){
         try {
-            const user = await User.findOne({where: {id: req.userId}})
+            const user = await User.findByPk(req.userId)
             if (user.deletedAt){
                 return res.status(200).send({
                     status: 200,
@@ -113,7 +113,7 @@ class UserController{
     }
     async userActivate(req: any, res: any){
         try {
-            const user = await User.findOne({where: {id: req.userId}})
+            const user = await User.findByPk(req.userId);
             if (!user.deletedAt){
                 return res.status(200).send({
                     status: 200,

@@ -1,9 +1,8 @@
 import bcrypt from "bcrypt";
-import sendMail from "../utils/mail";
-
 import db from "../../models/index"
-import {helpers} from "../helper/helpers";
+import { createBcrypt, helpers } from "../helper/helpers";
 import jwtGenerator from "../utils/jwtAuth";
+import {sendMessage} from "../utils/sendMessage";
 
 class AuthController {
 
@@ -12,14 +11,18 @@ class AuthController {
             const email = await db.User.findOne({ where: { email: req.body.email } });
 
             if (email && email?.is_verify) {
-                return res.status(400).json({ message: "Email address already in use!"});
+                return res.status(400).json({
+                    status: 400,
+                    message: "Email address already in use!"
+                });
             } else if (email){
-                return res.status(400).json({ message: "You already registry, please check your email for confirmation of your identity!"});
+                return res.status(400).json({
+                    status: 400,
+                    message: "You already registry, please check your email for confirmation of your identity!"
+                });
             }
 
-            const saltRound = 10;
-            const salt = await bcrypt.genSalt(saltRound);
-            const bcryptPassword = await bcrypt.hash(req.body.password, salt)
+            const bcryptPassword = await createBcrypt(req.body.password)
 
             const user = await db.User.create({
                 role: "owner",
@@ -39,7 +42,7 @@ class AuthController {
                 ...req.body.userDetails
             }))
 
-            await AuthController.sendMessage(verify, res, {
+            await sendMessage(res, verify, {
                 status: 200,
                 message: "Verification code has been send in your email!",
                 data: ''
@@ -87,9 +90,12 @@ class AuthController {
                     message: "Your code is no correct",
                 });
             }
-        }catch (err){
-            console.error(err)
-            return res.status(500).send("Server Error")
+            }catch (error: any){
+                console.log(error)
+                return  res.status(500).send({
+                    status: 500,
+                    message: error.message || "Error",
+            })
         }
     }
 
@@ -125,41 +131,24 @@ class AuthController {
             const userToken = jwtGenerator(user.id)
 
             const companies = await db.Company.findOne({where: {user_id: user.id}});
-            const companyToken = jwtGenerator(companies.id);
-
+            const companyToken = jwtGenerator(companies?.id);
+            // TODO: Change null
             return res.status(200).send({
                 status: 200,
                 message: "Sign in success.",
                 data: {
                     userToken,
-                    companyToken,
+                    companyToken: companies ? companyToken:"Don't have a company.",
                 }
             })
-        }catch (err){
-            console.error(err)
-            return res.status(500).send("Server Error")
-        }
-    }
-
-    // TODO: Move Helper or other place SendMessage
-    static async sendMessage(verify: any, res: any, message: object){
-        try {
-            sendMail(verify.email,"Confirm code", verify.code,  (err: any, data: any) => {
-                if (err){
-                    return res.status(500).json({ message: "Error"});
-                } else {
-                    return res.status(200).json(message);
-                }
-            })
-        }catch (err){
-            console.error(err)
-            return res.status(500).send({
+        }catch (error: any){
+            console.log(error)
+            return  res.status(500).send({
                 status: 500,
-                message: "Server Error"
+                message: error.message || "Error",
             })
         }
     }
-
 }
 
 

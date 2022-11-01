@@ -43,7 +43,7 @@ class CompanyController {
 
     async getCompany(req: any, res: any){
         try {
-            await db.Company.findOne({ where: {id: req.param("id")}});
+            await db.Company.findByPk(req.param("id"));
 
             const companyToken = jwtGenerator(req.param("id"));
             return res.status(200).json({

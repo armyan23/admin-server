@@ -21,7 +21,7 @@ module.exports = {
           key: 'id'
         },
       },
-      person_id:{
+      employee_id:{
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {

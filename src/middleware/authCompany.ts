@@ -9,7 +9,8 @@ async function authCompany(req:any, res:any, next:any){
 
         if (!companyToken){
             return res.status(403).send({
-                message: "Not Authorization!"
+                status: 403,
+                message:"Not Authorization!"
             });
         }
 

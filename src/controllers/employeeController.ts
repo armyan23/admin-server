@@ -6,28 +6,28 @@ class EmployeeController {
     async createEmployee(req: any, res: any){
         try {
             // // 1. INSERT a new student
-            const employeeCreated = await Employee.create(req.body)
-            await employeeCreated.save()
+            const addEmployee = await Employee.create(req.body)
+            await addEmployee.save()
             //   const student = await Student.create({
             //        firstName: "Jake",
             //   });
 
             // // 2. Find the Classes row
-            const company = await Company.findOne({where: {id: req.companyId}});
+            const company = await Company.findByPk(req.companyId);
             //    const classRow = await Class.findByPk(1);
 
             // // 3. INSERT the association in Enrollments table
             //    await student.addClass(classRow, { through: Enrollment });
-            await company.addEmployee(employeeCreated,{
-                through:  {
-                    role: "employee"}
+                await company.addEmployee(addEmployee,{
+                    through:  {
+                        role: "employee"}
 
-            })
+                })
 
             return res.status(200).json({
                 status: 200,
                 message: "Success",
-                data: employeeCreated
+                data: addEmployee
             })
         }catch (error: any){
             console.log(error);
@@ -39,12 +39,12 @@ class EmployeeController {
     }
     async getEmployeeId(req: any, res: any){
         try {
-            const employee = Employee.findOne({where: req.body.id})
-            // TODO: Dont make
+            // TODO: Dont WORK
+            // const employee = Employee.findOne({where: req.body.id})
             return res.status(200).json({
                 status: 200,
                 message: "Success",
-                data: employee
+                // data: employee
             })
         }catch (error: any){
             console.log(error);

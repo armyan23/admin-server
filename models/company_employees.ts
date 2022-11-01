@@ -1,12 +1,10 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+import { Model } from 'sequelize';
 
 interface ICompanyRefPerson {
   role: string
   companyId: string
-  personId: number
+  employeeId: number
   createdAt: Date
   updatedAt: Date
 }
@@ -21,7 +19,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
        */
       role!: string;
       companyId!: string;
-      personId!: number;
+      employeeId!: number;
       createdAt!: Date;
       updatedAt!: Date;
       static associate(models: any) {
@@ -38,10 +36,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
         field: 'company_id'
       },
-      personId: {
+      employeeId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        field: 'person_id'
+        field: 'employee_id'
       },
       createdAt: {
         type: DataTypes.DATE,

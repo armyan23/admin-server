@@ -2,6 +2,7 @@
 import { Model } from 'sequelize';
 
 interface IEmployeeAttributes {
+  user_id: number | null,
   email: string,
   fistName: string,
   lastName: string,
@@ -28,7 +29,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
        * This method is not a part of Sequelize lifecycle.
        * The `models/index` file will call this method automatically.
        */
-
+      user_id!: number;
       email!: string;
       fistName!: string;
       lastName!: string;
@@ -51,12 +52,25 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
         this.belongsToMany(Company, {
           as: 'Company',
-          foreignKey: 'personId',
+          foreignKey: 'employeeId',
           through: Company_Employees,
         });
+        // this.hasOne(Company_Admins, {
+        //   as: "Admin",
+        //   foreignKey: "employeeId",
+        // });
+        // this.belongsToMany(Company, {
+        //   as: 'Company',
+        //   foreignKey: 'employeeId',
+        //   through: Company_Employees,
+        // });
       }
     }
     Employee.init({
+      user_id: {
+        type: DataTypes.INTEGER,
+        unique: true,
+      },
       email:{
         type: DataTypes.STRING,
         allowNull: false,

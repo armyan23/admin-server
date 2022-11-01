@@ -31,18 +31,26 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
         static associate(models: any) {
             // define association
-            this.hasOne(models.VerifyEmail,{
+            const { Company, Employee, VerifyEmail, UserDetails } = models
+
+            this.hasOne(VerifyEmail,{
                 as: "Verify",
                 foreignKey: "user_id"
             })
-            this.hasOne(models.UserDetails,{
+            this.hasOne(UserDetails,{
                 as: "Details",
                 foreignKey: "user_id"
             })
-            // TODO: hasMany DONT WORK
-            this.hasMany(models.Company,{
+            this.hasMany(Company,{
                 foreignKey: "user_id"
             })
+            // this.hasMany(Company_Admins,{
+            //     foreignKey: "createdById"
+            // })
+            // this.belongsTo(Company_Admins,{
+            //     foreignKey: "user_id"
+            // })
+
             // User.hasOne(models.UserDetails,{
             //     as: "Details",
             //     foreignKey: "user_id"

@@ -12,6 +12,7 @@
     "seed": "npx sequelize-cli db:seed:all",
     "seed:undo": "npx sequelize-cli db:seed:undo",
     "migrate": "npx sequelize-cli db:migrate",
+    "downSingle":"sequelize db:migrate:undo --name 20221016154644-create-employee.js",
     "down": "npx sequelize-cli db:migrate:undo:all"
   },
   "author": "",
