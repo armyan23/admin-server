@@ -1,12 +1,15 @@
 import db from "../../models";
 
-const { Company, Employee } = db
+const { Company, Employee, User } = db
 
 class EmployeeController {
     async createEmployee(req: any, res: any){
         try {
             // // 1. INSERT a new student
-            const addEmployee = await Employee.create(req.body)
+            const addEmployee = await Employee.create({
+                ...req.body,
+                creatorId: req.userId
+            })
             await addEmployee.save()
             //   const student = await Student.create({
             //        firstName: "Jake",
@@ -21,7 +24,6 @@ class EmployeeController {
                 await company.addEmployee(addEmployee,{
                     through:  {
                         role: "employee"}
-
                 })
 
             return res.status(200).json({
@@ -62,8 +64,16 @@ class EmployeeController {
                 },
                 include: {
                     model: Employee,
-                    as: "Employee"
+                    as: "Employee",
+                    include:[{
+                        model: User,
+                        as: "Admin",
+                    },{
+                        model: User,
+                        as: "CreatorId",
+                    }]
                 }
+
             })
 
             return res.status(200).json({

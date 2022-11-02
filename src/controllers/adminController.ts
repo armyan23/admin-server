@@ -29,7 +29,11 @@ class AdminController{
             await addUser.save();
 
             // Add Employee in table
-            const addEmployee = await Employee.create({...employee})
+            const addEmployee = await Employee.create({
+                ...employee,
+                creatorId: req.userId,
+                user_id: addUser.id
+            })
             await addEmployee.save()
 
             // Add employee and company ID into ref table

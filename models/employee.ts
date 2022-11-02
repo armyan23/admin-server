@@ -3,6 +3,7 @@ import { Model } from 'sequelize';
 
 interface IEmployeeAttributes {
   user_id: number | null,
+  creatorId: number,
   email: string,
   fistName: string,
   lastName: string,
@@ -30,6 +31,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
        * The `models/index` file will call this method automatically.
        */
       user_id!: number;
+      creatorId!: number;
       email!: string;
       fistName!: string;
       lastName!: string;
@@ -48,28 +50,33 @@ module.exports = (sequelize: any, DataTypes: any) => {
       updatedAt!: Date;
       static associate(models: any) {
         // define association here
-        const { Company, Company_Employees } = models;
+        const { Company, Company_Employees, User } = models;
 
         this.belongsToMany(Company, {
           as: 'Company',
           foreignKey: 'employeeId',
           through: Company_Employees,
         });
-        // this.hasOne(Company_Admins, {
-        //   as: "Admin",
-        //   foreignKey: "employeeId",
-        // });
-        // this.belongsToMany(Company, {
-        //   as: 'Company',
-        //   foreignKey: 'employeeId',
-        //   through: Company_Employees,
-        // });
+
+        this.belongsTo(User,{
+          as: "Admin",
+          foreignKey: "user_id"
+        })
+
+        this.belongsTo(User,{
+          as: "CreatorId",
+          foreignKey:"creatorId"
+        })
       }
     }
     Employee.init({
       user_id: {
         type: DataTypes.INTEGER,
         unique: true,
+      },
+      creatorId: {
+        type: DataTypes.INTEGER,
+        field: "creator_id"
       },
       email:{
         type: DataTypes.STRING,

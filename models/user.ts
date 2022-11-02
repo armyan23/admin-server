@@ -44,22 +44,14 @@ module.exports = (sequelize: any, DataTypes: any) => {
             this.hasMany(Company,{
                 foreignKey: "user_id"
             })
-            // this.hasMany(Company_Admins,{
-            //     foreignKey: "createdById"
-            // })
-            // this.belongsTo(Company_Admins,{
-            //     foreignKey: "user_id"
-            // })
-
-            // User.hasOne(models.UserDetails,{
-            //     as: "Details",
-            //     foreignKey: "user_id"
-            // })
-            // /// ete verifyic uzer chenq uzena vercnel apa petq che nerqevi toxy grel
-            // models.verifyEmail.hasOne(User,{as: "User"})
-            // User.belongsToMany(models.Project, {
-            //     through: "ProjectAssignments"
-            // })
+            this.hasOne(Employee,{
+                as: "Admin",
+                foreignKey:"user_id"
+            })
+            this.hasMany(Employee,{
+                as: "CreatorId",
+                foreignKey: "creatorId"
+            })
         }
     }
 

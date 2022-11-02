@@ -16,6 +16,13 @@ module.exports = {
           key: "id"
         },
       },
+      creator_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "users",
+          key: "id"
+        },
+      },
       fist_name:{
         type: Sequelize.STRING,
         allowNull: false,
