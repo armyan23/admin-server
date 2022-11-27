@@ -138,8 +138,22 @@ class AuthController {
                 message: "Sign in success.",
                 data: {
                     userToken,
-                    companyToken: companies ? companyToken:"Don't have a company.",
+                    companyToken: companies ? companyToken: null,
                 }
+            })
+        }catch (error: any){
+            console.log(error)
+            return  res.status(500).send({
+                status: 500,
+                message: error.message || "Error",
+            })
+        }
+    }
+    async isLogin(req: any, res: any){
+        try {
+            return res.status(200).send({
+                status: 200,
+                message: "Is login.",
             })
         }catch (error: any){
             console.log(error)

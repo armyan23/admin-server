@@ -19,10 +19,9 @@ async function authorization(req:any, res:any, next:any){
 
         next()
     }catch (err){
-        console.error(err, 'Err');
-        return res.status(500).send({
-            status: 500,
-            message: "Server error!"
+        return res.status(403).send({
+            status: 403,
+            message: "Invalid token."
         });
     }
 }

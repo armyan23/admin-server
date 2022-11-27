@@ -13,6 +13,7 @@ const main =async () => {
     app.use(cors());
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
+
     //Router
     app.use("/api", router)
     // app.use("/api/dashboard", routerDashboard)
