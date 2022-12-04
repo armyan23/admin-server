@@ -5,7 +5,7 @@ interface IEmployeeAttributes {
   user_id: number | null,
   creatorId: number,
   email: string,
-  fistName: string,
+  firstName: string,
   lastName: string,
   patronymic: string,
   role: string,
@@ -33,7 +33,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       user_id!: number;
       creatorId!: number;
       email!: string;
-      fistName!: string;
+      firstName!: string;
       lastName!: string;
       patronymic!: string;
       role!: string;
@@ -87,10 +87,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
           }
         }
       },
-      fistName:{
+      firstName:{
         type: DataTypes.STRING,
         allowNull: false,
-        field: "fist_name"
+        field: "first_name"
       },
       lastName:{
         type: DataTypes.STRING,

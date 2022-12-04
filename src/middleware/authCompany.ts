@@ -1,21 +1,24 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import db from "../../models";
 
 dotenv.config();
 
 async function authCompany(req:any, res:any, next:any){
     try{
-        const companyToken = req.header("companyToken");
+        req.header("company")
 
-        if (!companyToken){
-            return res.status(403).send({
-                status: 403,
-                message:"Not Authorization!"
-            });
-        }
+        const companies = await db.Company.findAll({where: {user_id: req.userId}});
+        const company = req.header("company");
+        // ToDo: Change middleware
+        // if (!company){
+        //     return res.status(403).send({
+        //         status: 403,
+        //         message:"Not Authorization!"
+        //     });
+        // }
 
-        const payload: any = jwt.verify(companyToken, `${process.env.JWT_SECRET}`);
-        req.companyId = payload.id;
+        req.companyId = company;
 
         next()
     }catch (err){

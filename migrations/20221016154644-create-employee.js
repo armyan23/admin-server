@@ -23,7 +23,7 @@ module.exports = {
           key: "id"
         },
       },
-      fist_name:{
+      first_name:{
         type: Sequelize.STRING,
         allowNull: false,
       },

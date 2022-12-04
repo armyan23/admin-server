@@ -30,7 +30,8 @@ class AuthController {
 
             const verify = await user.setVerify(new db.VerifyEmail({
                 email: user.email,
-                code: codeGenerate(),
+                // code: codeGenerate(),
+                code: 1234
             }))
 
             // TODO: Edit this part
@@ -127,14 +128,14 @@ class AuthController {
             const userToken = jwtGenerator(user.id)
 
             const companies = await db.Company.findOne({where: {user_id: user.id}});
-            const companyToken = jwtGenerator(companies?.id);
-            // TODO: Change null
+            const company = companies?.id
+
             return res.status(200).send({
                 status: 200,
                 message: "Sign in success.",
                 data: {
                     userToken,
-                    companyToken: companies ? companyToken: null,
+                    company,
                 }
             })
         }catch (error: any){
@@ -147,9 +148,13 @@ class AuthController {
     }
     async isLogin(req: any, res: any){
         try {
+            const companies = await db.Company.findOne({where: {user_id: req.userId}});
+            const company = companies?.id
+
             return res.status(200).send({
                 status: 200,
                 message: "Is login.",
+                company
             })
         }catch (error: any){
             console.log(error)

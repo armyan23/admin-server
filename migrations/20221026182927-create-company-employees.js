@@ -15,7 +15,7 @@ module.exports = {
       },
       company_id:{
         allowNull: false,
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         references: {
           model: "companies",
           key: 'id'

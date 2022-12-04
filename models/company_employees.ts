@@ -33,7 +33,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       companyId:{
         allowNull: false,
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         field: 'company_id'
       },
       employeeId: {

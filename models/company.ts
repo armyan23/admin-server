@@ -1,8 +1,7 @@
 'use strict';
-import {Model, UUIDV4} from 'sequelize';
+import {Model} from 'sequelize';
 
 interface ICompanyAttributes {
-    id: string,
     user_id: number,
     nameCompany: string,
     aboutCompany: string,
@@ -22,7 +21,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
              * This method is not a part of Sequelize lifecycle.
              * The `models/index` file will call this method automatically.
              */
-        id!: string;
         user_id!: number;
         nameCompany!: string;
         aboutCompany!: string;
@@ -45,12 +43,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
   }
 
   Company.init({
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: UUIDV4,
-      allowNull: false,
-      primaryKey: true,
-    },
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
