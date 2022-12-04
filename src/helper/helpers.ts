@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 
-export function helpers(length = 8){
+export function codeGenerate(length = 8){
     return Math.random().toString(36).substring(2, length);
 }
 

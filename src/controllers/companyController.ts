@@ -1,5 +1,5 @@
 import db from "../../models";
-import jwtGenerator from "../utils/jwtAuth";
+import jwtGenerator from "../helper/jwtAuth";
 
 class CompanyController {
     async createCompany(req:any, res:any){

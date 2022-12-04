@@ -1,6 +1,6 @@
 import db from "../../models";
 import {createBcrypt} from "../helper/helpers";
-import {sendMessage} from "../utils/sendMessage";
+import {sendMessage} from "../helper/sendMessage";
 
 const { User, Employee, Company, Company_Employees } = db
 

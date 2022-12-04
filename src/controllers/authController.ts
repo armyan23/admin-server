@@ -1,15 +1,13 @@
 import bcrypt from "bcrypt";
 import db from "../../models/index"
-import { createBcrypt, helpers } from "../helper/helpers";
-import jwtGenerator from "../utils/jwtAuth";
-import {sendMessage} from "../utils/sendMessage";
+import { createBcrypt, codeGenerate } from "../helper/helpers";
+import jwtGenerator from "../helper/jwtAuth";
+import {sendMessage} from "../helper/sendMessage";
 
 class AuthController {
-
     async register(req:any, res:any){
         try{
             const email = await db.User.findOne({ where: { email: req.body.email } });
-
             if (email && email?.is_verify) {
                 return res.status(400).json({
                     status: 400,
@@ -23,7 +21,6 @@ class AuthController {
             }
 
             const bcryptPassword = await createBcrypt(req.body.password)
-
             const user = await db.User.create({
                 role: "owner",
                 email: req.body.email,
@@ -33,8 +30,7 @@ class AuthController {
 
             const verify = await user.setVerify(new db.VerifyEmail({
                 email: user.email,
-                // code: helpers(),
-                code: 1234,
+                code: codeGenerate(),
             }))
 
             // TODO: Edit this part
