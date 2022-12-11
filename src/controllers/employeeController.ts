@@ -41,12 +41,15 @@ class EmployeeController {
     }
     async getEmployeeId(req: any, res: any){
         try {
-            // TODO: Dont WORK
-            // const employee = Employee.findOne({where: req.body.id})
+            const employee = await Employee.findOne({
+                where: {
+                    id: req?.params?.id
+                }
+            })
+
             return res.status(200).json({
                 status: 200,
-                message: "Success",
-                // data: employee
+                data: employee,
             })
         }catch (error: any){
             console.log(error);
