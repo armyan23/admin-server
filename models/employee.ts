@@ -15,6 +15,7 @@ interface IEmployeeAttributes {
   country: string,
   city: string,
   streetAddress: string,
+  image: string,
   birthDate: Date,
   startWork: Date,
   endWork: Date,
@@ -43,6 +44,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       country!: string;
       city!: string;
       streetAddress!: string;
+      image!: string;
       birthDate!: Date;
       startWork!: Date;
       endWork!: Date;
@@ -131,6 +133,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
         field: "street_address"
       },
+      image: {
+        type: DataTypes.STRING,
+      },
       birthDate: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -143,7 +148,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       endWork: {
         type: DataTypes.DATE,
-        // allowNull: false,
         field: "end_work"
       },
       createdAt: {

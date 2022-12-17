@@ -8,6 +8,7 @@ const employeeRouter = Router();
 employeeRouter.post("/create", authorization, authCompany, EmployeeController.createEmployee);
 employeeRouter.get("/all", authorization, authCompany, EmployeeController.getEmployeesAll);
 employeeRouter.get("/:id", authorization, authCompany, EmployeeController.getEmployeeId);
+employeeRouter.delete("/delete/:id", authorization, authCompany, EmployeeController.deleteEmployee);
 // employeeRoutes.post("/admin", authorization, EmployeeController.userInfo);
 // employeeRoutes.post("/director", authorization, EmployeeController.userInfo);
 

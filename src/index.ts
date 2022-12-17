@@ -2,21 +2,23 @@ import express from "express";
 import cors from "cors";
 import router from "./routes";
 import dotenv from "dotenv";
-// import routerDashboard from "./routes/dashboard"
 
 const main =async () => {
 
     const app = express();
     dotenv.config();
 
-    //Middleware
     app.use(cors());
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
+    app.use(
+        '/resources',
+        express.static(__dirname + '/resources', { maxAge: 3600000 })
+    );
+
     //Router
     app.use("/api", router)
-    // app.use("/api/dashboard", routerDashboard)
 
     // Server
     app.listen(process.env.SERVER_PORT,() => {

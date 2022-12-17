@@ -1,4 +1,5 @@
 import db from "../../models";
+import {Op} from "sequelize";
 
 const { Company, Employee, User } = db
 
@@ -61,12 +62,19 @@ class EmployeeController {
     }
     async getEmployeesAll(req: any, res: any){
         try {
+            const { type } = req?.query
+
             const company = await Company.findOne({
                 where: {
                     id: req.companyId,
                 },
                 include: {
                     model: Employee,
+                    where: {
+                        endWork: type === "active" ? null : {
+                            [Op.ne]: null
+                        }
+                    },
                     as: "Employee",
                     include:[{
                         model: User,
@@ -82,7 +90,27 @@ class EmployeeController {
             return res.status(200).json({
                 status: 200,
                 message: "Success",
-                data: company.Employee
+                data: company.Employee,
+            })
+        }catch (error: any){
+            console.log(error);
+            return  res.status(500).send({
+                status: 500,
+                message: error.message || "Error",
+            })
+        }
+    }
+    async deleteEmployee(req: any, res: any){
+        try {
+            const { id } =  req?.params
+
+            await Employee.update({
+                endWork: new Date()
+            },{where: {id: id}})
+
+            return res.status(200).json({
+                status: 200,
+                message: "Success",
             })
         }catch (error: any){
             console.log(error);

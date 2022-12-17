@@ -67,6 +67,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      image:{
+        type: Sequelize.STRING,
+      },
       birth_date:{
         type: Sequelize.DATE,
         allowNull: false,
