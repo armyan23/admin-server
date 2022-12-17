@@ -90,7 +90,7 @@ class EmployeeController {
             return res.status(200).json({
                 status: 200,
                 message: "Success",
-                data: company.Employee,
+                data: company? company.Employee : [],
             })
         }catch (error: any){
             console.log(error);
@@ -106,6 +106,26 @@ class EmployeeController {
 
             await Employee.update({
                 endWork: new Date()
+            },{where: {id: id}})
+
+            return res.status(200).json({
+                status: 200,
+                message: "Success",
+            })
+        }catch (error: any){
+            console.log(error);
+            return  res.status(500).send({
+                status: 500,
+                message: error.message || "Error",
+            })
+        }
+    }
+    async restoreEmployee(req: any, res: any){
+        try {
+            const { id } =  req?.params
+
+            await Employee.update({
+                endWork: null
             },{where: {id: id}})
 
             return res.status(200).json({
