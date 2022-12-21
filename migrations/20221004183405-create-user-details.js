@@ -31,6 +31,9 @@ module.exports = {
       city : {
         type: Sequelize.STRING,
       },
+      image:{
+        type: Sequelize.STRING,
+      },
       birth_date  : {
         type: Sequelize.DATE,
       },

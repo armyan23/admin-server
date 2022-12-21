@@ -10,6 +10,7 @@ interface IDetailsAttributes {
     phoneNumber: number,
     country: string,
     city: string,
+    image:string,
     birthDate: Date,
     createdAt: Date,
     updatedAt: Date,
@@ -31,6 +32,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         phoneNumber!: number;
         country!: string;
         city!: string;
+        image!:string;
         birthDate!: Date;
         createdAt!: Date;
         updatedAt!: Date;
@@ -66,6 +68,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
             type: DataTypes.STRING,
         },
         city: {
+            type: DataTypes.STRING,
+        },
+        image: {
             type: DataTypes.STRING,
         },
         birthDate: {

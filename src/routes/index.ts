@@ -10,7 +10,7 @@ const router = Router();
 router.use("/auth", authRoutes);
 router.use("/employee", employeeRouter);
 router.use("/company", companyRouter);
-router.use("/edit", userRoutes);
+router.use("/profile", userRoutes);
 router.use("/admin", adminRoutes);
 
 export default router;

@@ -5,6 +5,26 @@ import { createBcrypt } from "../helper/helpers";
 const { User, UserDetails } = db
 
 class UserController{
+    async profileData(req: any, res: any){
+        try {
+            // TODO: Change This part
+            const user = await User.findByPk( req.userId);
+            const details = await UserDetails.findByPk( req.userId)
+
+            return res.status(200).send({
+                status: 200,
+                message: "Success",
+                userId: req.userId,
+                data: {...user.dataValues, details}
+            });
+        }catch (err){
+            console.error(err)
+            return res.status(500).send({
+                status: 500,
+                message:"Server Error"
+            })
+        }
+    }
     async editUserDetails(req: any, res: any){
         try {
             const user = await UserDetails.update({
