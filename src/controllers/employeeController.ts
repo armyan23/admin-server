@@ -1,31 +1,32 @@
 import db from "../../models";
 import {Op} from "sequelize";
+import {createImage} from "../helper/helpers";
 
 const { Company, Employee, User } = db
 
 class EmployeeController {
     async createEmployee(req: any, res: any){
         try {
-            // // 1. INSERT a new student
+            const {body, userId, companyId, files} = req
+
             const addEmployee = await Employee.create({
-                ...req.body,
-                creatorId: req.userId
+                ...body,
+                creatorId: userId,
+                endWork: body.endWork === "null" ? null : body.endWork
             })
             await addEmployee.save()
-            //   const student = await Student.create({
-            //        firstName: "Jake",
-            //   });
 
-            // // 2. Find the Classes row
-            const company = await Company.findByPk(req.companyId);
-            //    const classRow = await Class.findByPk(1);
+            const company = await Company.findByPk(companyId);
 
             // // 3. INSERT the association in Enrollments table
             //    await student.addClass(classRow, { through: Enrollment });
-                await company.addEmployee(addEmployee,{
-                    through:  {
-                        role: "employee"}
-                })
+            await company.addEmployee(addEmployee,{
+                through:  {role: "employee"}
+            })
+
+            if (files?.length > 0) {
+                await createImage(files, addEmployee.id, Employee)
+            }
 
             return res.status(200).json({
                 status: 200,
@@ -103,10 +104,16 @@ class EmployeeController {
     async updateEmployee(req: any, res: any){
         try {
             const { id } =  req?.params
+            const { body, files } =  req
 
             await Employee.update({
-                ...req.body
+                ...body,
+                endWork: body.endWork === "null" ? null : body.endWork
             },{where: {id: id}})
+
+            if (files?.length > 0) {
+                await createImage(files, id, Employee)
+            }
 
             return res.status(200).json({
                 status: 200,
