@@ -1,6 +1,6 @@
 import db from "../../models";
 import {Op} from "sequelize";
-import {createImage} from "../helper/helpers";
+import {createImage, deleteImage} from "../helper/helpers";
 
 const { Company, Employee, User } = db
 
@@ -25,7 +25,7 @@ class EmployeeController {
             })
 
             if (files?.length > 0) {
-                await createImage(files, addEmployee.id, Employee)
+                await createImage(files, addEmployee.id, Employee,"employees")
             }
 
             return res.status(200).json({
@@ -106,13 +106,15 @@ class EmployeeController {
             const { id } =  req?.params
             const { body, files } =  req
 
-            await Employee.update({
+            const employee = await Employee.findByPk( id)
+            await employee.update({
                 ...body,
                 endWork: body.endWork === "null" ? null : body.endWork
-            },{where: {id: id}})
+            });
 
             if (files?.length > 0) {
-                await createImage(files, id, Employee)
+                await deleteImage(employee)
+                await createImage(files, id, employee,"employees")
             }
 
             return res.status(200).json({

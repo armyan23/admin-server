@@ -1,6 +1,6 @@
 import db from "../../models";
 import bcrypt from "bcrypt";
-import { createBcrypt } from "../helper/helpers";
+import {createBcrypt, createImage, deleteImage} from "../helper/helpers";
 
 const { User, UserDetails } = db
 
@@ -9,7 +9,9 @@ class UserController{
         try {
             // TODO: Change This part
             const user = await User.findByPk( req.userId);
-            const details = await UserDetails.findByPk( req.userId)
+            const details = await UserDetails.findByPk( req.userId,{
+                attributes: ['birthDate', 'city', 'country','firstName','gender','lastName','phoneNumber','image'],
+            })
 
             return res.status(200).send({
                 status: 200,
@@ -27,15 +29,21 @@ class UserController{
     }
     async editUserDetails(req: any, res: any){
         try {
-            const user = await UserDetails.update({
-                ...req.body
-            },{where: {user_id: req.userId}})
+            const {body, userId, files} = req
+
+            const details = await UserDetails.findByPk( req.userId)
+
+            await details.update({...body});
+
+            if (files?.length > 0) {
+                await deleteImage(details)
+                await createImage(files, userId, details,"company/users")
+            }
 
             return res.status(200).send({
                 status: 200,
                 message: "Success",
-                userId: req.userId,
-                data: user
+                data: details
             });
         }catch (err){
             console.error(err)

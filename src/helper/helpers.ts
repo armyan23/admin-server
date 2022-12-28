@@ -13,13 +13,13 @@ export async function createBcrypt(password: string, saltRound=  10){
     return bcryptPassword
 }
 
-export async function createImage(files: any, id: number, Employee: any){
+export async function createImage(files: any, id: number, item: any, dirFile: string){
     for (const file of files) {
         const namePrefix = 1;
-        const dir = `resources/employees/${id}`;
+        const dir = `resources/${dirFile}/${id}`;
 
         if (!fs.existsSync(`src/${dir}`)){
-            fs.mkdirSync(`src/${dir}`);
+            fs.mkdirSync(`src/${dir}`,{recursive: true});
         }
         const url = path.join(
             path.resolve(),
@@ -28,8 +28,15 @@ export async function createImage(files: any, id: number, Employee: any){
         );
         const fileUrl = `${process.env.SERVER_API}/${dir}/${namePrefix}_${file.originalname}`;
         await fs.writeFileSync(url, file.buffer);
-        await Employee.update({
+        await item.update({
             image: fileUrl
-        },{where: {id: id}})
+        })
     }
+}
+
+export async function deleteImage( Model: any, ){
+    const path = Model.image.replace(process.env.SERVER_API, "./src");
+    await fs.unlink(path, (err) => {
+        if (err) console.log(err);
+    });
 }
