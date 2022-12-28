@@ -106,7 +106,7 @@ class EmployeeController {
             const { id } =  req?.params
             const { body, files } =  req
 
-            const employee = await Employee.findByPk( id)
+            const employee = await Employee.findByPk(id)
             await employee.update({
                 ...body,
                 endWork: body.endWork === "null" ? null : body.endWork
@@ -126,6 +126,27 @@ class EmployeeController {
             return  res.status(500).send({
                 status: 500,
                 message: error.message || "Error",
+            })
+        }
+    }
+    async deleteImage(req: any, res: any){
+        try {
+            const { id } =  req?.params
+
+            const employee = await Employee.findByPk(id)
+
+            await deleteImage(employee)
+
+            return res.status(200).send({
+                status: 200,
+                message: "Success",
+                data: employee
+            });
+        }catch (err){
+            console.error(err)
+            return res.status(500).send({
+                status: 500,
+                message:"Server Error"
             })
         }
     }

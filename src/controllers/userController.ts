@@ -31,7 +31,7 @@ class UserController{
         try {
             const {body, userId, files} = req
 
-            const details = await UserDetails.findByPk( req.userId)
+            const details = await UserDetails.findByPk(userId)
 
             await details.update({...body});
 
@@ -53,7 +53,24 @@ class UserController{
             })
         }
     }
+    async deleteImage(req: any, res: any){
+        try {
+            const details = await UserDetails.findByPk(req.userId)
+            await deleteImage(details)
 
+            return res.status(200).send({
+                status: 200,
+                message: "Success",
+                data: details
+            });
+        }catch (err){
+            console.error(err)
+            return res.status(500).send({
+                status: 500,
+                message:"Server Error"
+            })
+        }
+    }
     async editUserPassword(req: any, res: any){
         try {
             const { password, newPassword, confirmPassword } = await req.body;

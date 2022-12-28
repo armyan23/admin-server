@@ -39,4 +39,5 @@ export async function deleteImage( Model: any, ){
     await fs.unlink(path, (err) => {
         if (err) console.log(err);
     });
+    Model.update({image: null})
 }
