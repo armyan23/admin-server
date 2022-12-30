@@ -1,5 +1,4 @@
 import db from "../../models";
-import jwtGenerator from "../helper/jwtAuth";
 
 class CompanyController {
     async createCompany(req:any, res:any){
@@ -13,6 +12,22 @@ class CompanyController {
 
             return res.status(200).json({
                 body: company,
+            })
+        }catch (error: any){
+            console.log(error);
+            return  res.status(500).send({
+                status: 500,
+                message: error.message || "Error",
+            })
+        }
+    }
+    async updateCompany(req:any, res:any){
+        try{
+            const company = await db.Company.findByPk(req.param("id"));
+
+            await company.update(req.body)
+            return res.status(200).json({
+                data: company,
             })
         }catch (error: any){
             console.log(error);
@@ -43,14 +58,10 @@ class CompanyController {
 
     async getCompany(req: any, res: any){
         try {
-            await db.Company.findByPk(req.param("id"));
+            const company = await db.Company.findByPk(req.param("id"));
 
-            const companyToken = jwtGenerator(req.param("id"));
             return res.status(200).json({
-                params:{
-                    id:req.param("id")
-                },
-                companyToken,
+                data: company
             })
         }catch (error: any){
             console.log(error);
