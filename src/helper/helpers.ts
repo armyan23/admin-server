@@ -35,7 +35,7 @@ export async function createImage(files: any, id: number, item: any, dirFile: st
 }
 
 export async function deleteImage( Model: any, ){
-    const path = Model.image.replace(process.env.SERVER_API, "./src");
+    const path = Model?.image?.replace(process.env.SERVER_API, "./src");
     await fs.unlink(path, (err) => {
         if (err) console.log(err);
     });
