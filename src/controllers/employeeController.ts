@@ -113,7 +113,7 @@ class EmployeeController {
             });
 
             if (files?.length > 0) {
-                await deleteImage(employee)
+                if (employee.image) await deleteImage(employee)
                 await createImage(files, id, employee,"employees")
             }
 

@@ -36,7 +36,7 @@ class UserController{
             await details.update({...body});
 
             if (files?.length > 0) {
-                await deleteImage(details)
+                if (details.image) await deleteImage(details)
                 await createImage(files, userId, details,"company/users")
             }
 
