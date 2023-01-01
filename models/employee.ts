@@ -16,6 +16,7 @@ interface IEmployeeAttributes {
   city: string,
   streetAddress: string,
   image: string,
+  salary: number,
   birthDate: Date,
   startWork: Date,
   endWork: Date,
@@ -45,6 +46,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       city!: string;
       streetAddress!: string;
       image!: string;
+      salary!: number;
       birthDate!: Date;
       startWork!: Date;
       endWork!: Date;
@@ -74,6 +76,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
     Employee.init({
       user_id: {
         type: DataTypes.INTEGER,
+        references: {
+          model: "users",
+          key: "id",
+        },
         unique: true,
       },
       creatorId: {
@@ -135,6 +141,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       image: {
         type: DataTypes.STRING,
+      },
+      salary: {
+        type: DataTypes.INTEGER,
+        field: "salary"
       },
       birthDate: {
         type: DataTypes.DATE,

@@ -24,6 +24,17 @@ module.exports = (sequelize: any, DataTypes: any) => {
       updatedAt!: Date;
       static associate(models: any) {
         // define association here
+        const { Company, Employee } = models;
+
+        this.belongsTo(Company, {
+            as: "company",
+            foreignKey: "id",
+          });
+
+          this.belongsTo(Employee, {
+            as: "employee",
+            foreignKey: "id",
+          });
       }
     }
     Company_Employees.init({

@@ -25,7 +25,7 @@ class EmployeeController {
             })
 
             if (files?.length > 0) {
-                await createImage(files, addEmployee.id, Employee,"employees")
+                await createImage(files, addEmployee.id, addEmployee,"employees")
             }
 
             return res.status(200).json({

@@ -10,6 +10,7 @@ interface ICompanyAttributes {
     image: string,
     email: string,
     website: string,
+    createdDate: Date,
     createdAt: Date,
     updatedAt: Date,
 }
@@ -30,6 +31,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         image!: string;
         email!: string;
         website!: string;
+        createdDate!: Date;
         createdAt!: Date;
         updatedAt!: Date;
 
@@ -76,6 +78,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         },
         website: {
             type: DataTypes.STRING,
+        },
+        createdDate:{
+            allowNull: false,
+            type: DataTypes.DATE,
+            field: 'created_date'
         },
         createdAt: {
             allowNull: false,
