@@ -76,14 +76,14 @@ class EmployeeController {
                             [Op.ne]: null
                         }
                     },
-                    as: "Employee",
-                    include:[{
-                        model: User,
-                        as: "Admin",
-                    },{
-                        model: User,
-                        as: "CreatorId",
-                    }]
+                    as: "employee",
+                    // include:[{
+                    //     model: User,
+                    //     as: "Admin",
+                    // },{
+                    //     model: User,
+                    //     as: "CreatorId",
+                    // }]
                 }
 
             })
@@ -91,7 +91,7 @@ class EmployeeController {
             return res.status(200).json({
                 status: 200,
                 message: "Success",
-                data: company? company.Employee : [],
+                data: company? company.employee : [],
             })
         }catch (error: any){
             console.log(error);

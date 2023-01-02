@@ -57,7 +57,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         const { Company, Company_Employees, User } = models;
 
         this.belongsToMany(Company, {
-          as: 'Company',
+          as: 'company',
           foreignKey: 'employeeId',
           through: Company_Employees,
         });

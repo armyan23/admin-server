@@ -1,7 +1,7 @@
 import db from "../../models";
 import {createImage, deleteImage} from "../helper/helpers";
 
-const { Company } = db
+const { Company, Employee } = db
 
 class CompanyController {
     async createCompany(req:any, res:any){
@@ -81,7 +81,6 @@ class CompanyController {
 
             return res.status(200).json({
                 status: 200,
-                message: "Success",
                 data: companies
             })
         }catch (error: any){
@@ -96,10 +95,28 @@ class CompanyController {
     async getCompany(req: any, res: any){
         try {
             const { id } =  req?.params
-            const company = await Company.findByPk(id);
+
+            const company = await Company.findByPk(id, {
+                attributes:['id','nameCompany','aboutCompany','typeCompany','phoneNumber','image','email','website',"createdDate"],
+                include: [{
+                    model: Employee,
+                    as: "employee",
+                }],
+            });
+            const male = company.employee.filter((elem: any) => elem.gender === "Male").length
+            const female = company.employee.filter((elem: any) => elem.gender === "Female").length
+            const costsSalary = company.employee.reduce((acc: any, elem: any) => (acc+elem.salary),0)
+
+            const employeeInfo = {
+                count: company.employee.length,
+                female,
+                male,
+                costsSalary
+            }
 
             return res.status(200).json({
-                data: company
+                data: company,
+                details: employeeInfo
             })
         }catch (error: any){
             console.log(error);

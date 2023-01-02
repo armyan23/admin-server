@@ -38,8 +38,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
         static associate(models: any) {
             // define association here
             const {Employee, Company_Employees} = models;
+
             this.belongsToMany(Employee, {
-                as: 'Employee',
+                as: 'employee',
                 foreignKey: 'companyId',
                 through: Company_Employees,
             });
