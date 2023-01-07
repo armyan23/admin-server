@@ -10,5 +10,6 @@ companyRouter.get("", authorization, CompanyController.getCompanies);
 companyRouter.post("/:id", authorization, multerMiddleware, CompanyController.updateCompany);
 companyRouter.delete("/image/:id", authorization, CompanyController.deleteImageCompany);
 companyRouter.get("/:id", authorization, CompanyController.getCompany);
+companyRouter.delete("/:id", authorization, CompanyController.deleteCompany);
 
 export default companyRouter;

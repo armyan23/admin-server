@@ -91,7 +91,6 @@ class CompanyController {
             })
         }
     }
-
     async getCompany(req: any, res: any){
         try {
             const { id } =  req?.params
@@ -117,6 +116,32 @@ class CompanyController {
             return res.status(200).json({
                 data: company,
                 details: employeeInfo
+            })
+        }catch (error: any){
+            console.log(error);
+            return  res.status(500).send({
+                status: 500,
+                message: error.message || "Error",
+            })
+        }
+    }
+    async deleteCompany(req: any, res: any){
+        try {
+            const { id } =  req?.params
+
+            const company = await Company.findByPk(id);
+
+            if (!company){
+                return  res.status(403).send({
+                    message: "Company don't found.",
+                    status: 403,
+                })
+            }
+
+            await company.destroy()
+
+            return res.status(200).json({
+                data: company,
             })
         }catch (error: any){
             console.log(error);
