@@ -1,19 +1,21 @@
-import { Router } from "express";
+import {Router} from "express";
 import authorization from "../middleware/authorization";
-import EmployeeController from "../controllers/employeeController";
 import authCompany from "../middleware/authCompany";
 import multerMiddleware from "../middleware/multer";
+import EmployeeController from "../controllers/employeeController";
 
 const employeeRouter = Router();
 
-employeeRouter.post("/create", authorization, authCompany, multerMiddleware, EmployeeController.createEmployee);
-employeeRouter.get("/all", authorization, authCompany, EmployeeController.getEmployeesAll);
-employeeRouter.get("/:id", authorization, authCompany, EmployeeController.getEmployeeId);
-employeeRouter.put("/edit/:id", authorization, authCompany, multerMiddleware, EmployeeController.updateEmployee);
-employeeRouter.delete("/delete-image/:id", authorization, authCompany, multerMiddleware, EmployeeController.deleteImage);
-employeeRouter.delete("/delete/:id", authorization, authCompany, EmployeeController.deleteEmployee);
-employeeRouter.post("/restore/:id", authorization, authCompany, EmployeeController.restoreEmployee);
-// employeeRoutes.post("/admin", authorization, EmployeeController.userInfo);
-// employeeRoutes.post("/director", authorization, EmployeeController.userInfo);
+employeeRouter.use("/", authorization);
+
+employeeRouter.post("/create", authCompany, multerMiddleware, EmployeeController.createEmployee);
+employeeRouter.get("/all", authCompany, EmployeeController.getEmployeesAll);
+employeeRouter.get("/:id", authCompany, EmployeeController.getEmployeeId);
+employeeRouter.put("/edit/:id", authCompany, multerMiddleware, EmployeeController.updateEmployee);
+employeeRouter.delete("/delete-image/:id", authCompany, multerMiddleware, EmployeeController.deleteImage);
+employeeRouter.delete("/delete/:id", authCompany, EmployeeController.deleteEmployee);
+employeeRouter.post("/restore/:id", authCompany, EmployeeController.restoreEmployee);
+// employeeRoutes.post("/admin", EmployeeController.userInfo);
+// employeeRoutes.post("/director", EmployeeController.userInfo);
 
 export default employeeRouter;

@@ -1,15 +1,17 @@
-import { Router } from "express";
+import {Router} from "express";
 import authorization from "../middleware/authorization";
-import CompanyController from "../controllers/companyController";
 import multerMiddleware from "../middleware/multer";
+import CompanyController from "../controllers/companyController";
 
 const companyRouter = Router();
 
-companyRouter.post("", authorization, multerMiddleware, CompanyController.createCompany);
-companyRouter.get("", authorization, CompanyController.getCompanies);
-companyRouter.post("/:id", authorization, multerMiddleware, CompanyController.updateCompany);
-companyRouter.delete("/image/:id", authorization, CompanyController.deleteImageCompany);
-companyRouter.get("/:id", authorization, CompanyController.getCompany);
-companyRouter.delete("/:id", authorization, CompanyController.deleteCompany);
+companyRouter.use("/", authorization);
+
+companyRouter.post("", multerMiddleware, CompanyController.createCompany);
+companyRouter.get("", CompanyController.getCompanies);
+companyRouter.post("/:id", multerMiddleware, CompanyController.updateCompany);
+companyRouter.delete("/image/:id", CompanyController.deleteImageCompany);
+companyRouter.get("/:id", CompanyController.getCompany);
+companyRouter.delete("/:id", CompanyController.deleteCompany);
 
 export default companyRouter;
