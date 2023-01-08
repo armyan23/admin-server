@@ -9,7 +9,7 @@ userRoutes.use("/", authorization);
 
 userRoutes.get("/", UserController.profileData);
 userRoutes.put("/user-details", multerMiddleware, UserController.editUserDetails);
-userRoutes.delete("/delete-image", multerMiddleware, UserController.deleteImage);
+userRoutes.delete("/delete-image", UserController.deleteImage);
 userRoutes.put("/password", UserController.editUserPassword);
 userRoutes.put("/email", UserController.editUserEmail);
 userRoutes.delete("/delete", UserController.userDelete);
