@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import router from "./routes";
 import dotenv from "dotenv";
+import router from "./routes";
 
 const main =async () => {
 
@@ -17,7 +17,7 @@ const main =async () => {
         express.static(__dirname + '/resources', { maxAge: 3600000 })
     );
 
-    //Router
+    //Routers
     app.use("/api", router)
 
     // Server
@@ -29,6 +29,3 @@ const main =async () => {
 main().catch(err => {
     console.log(err);
 })
-
-
-// Need turn on sequelize Type end user
