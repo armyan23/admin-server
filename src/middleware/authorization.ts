@@ -3,13 +3,13 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-async function authorization(req:any, res:any, next:any){
-    try{
+export async function authorization(req: any, res: any, next: any) {
+    try {
         const jwtToken = req.header("token");
-        if (!jwtToken){
+        if (!jwtToken) {
             return res.status(403).send({
                 status: 403,
-                message:"Not Authorization!"
+                message: "Not Authorization!"
             });
         }
 
@@ -18,7 +18,7 @@ async function authorization(req:any, res:any, next:any){
         req.userId = payload.id;
 
         next()
-    }catch (err){
+    } catch (err) {
         return res.status(403).send({
             status: 403,
             message: "Invalid token."

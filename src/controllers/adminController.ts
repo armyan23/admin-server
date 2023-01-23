@@ -31,6 +31,7 @@ class AdminController{
             // Add Employee in table
             const addEmployee = await Employee.create({
                 ...employee,
+                // endWork: body.endWork === "null" ? null : body.endWork,
                 creatorId: req.userId,
                 user_id: addUser.id
             })
@@ -50,23 +51,11 @@ class AdminController{
                 // code: helpers(),
                 code: 1234,
             }))
-
-            // const companyAdmin = await addUser.setAdmin(new Company_Admins({
-            //     employeeId: addEmployee.id,
-            //     createdById: req.userId,
-            //     role,
-            // }))
-
             await sendMessage(res, verify, {
                 status: 200,
                 message: `Verification code has been send in this ${email} email!`,
                 data: ''
             })
-            // return res.status(200).send({
-            //     status: 200,
-            //     message: "Success",
-            //     // body: req.body
-            // });
         }catch (error: any){
             console.log(error)
             return  res.status(500).send({

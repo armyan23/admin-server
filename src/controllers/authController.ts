@@ -1,19 +1,21 @@
 import bcrypt from "bcrypt";
 import db from "../../models/index"
-import { createBcrypt, codeGenerate } from "../helper/helpers";
+import {createBcrypt, codeGenerate} from "../helper/helpers";
 import jwtGenerator from "../helper/jwtAuth";
 import {sendMessage} from "../helper/sendMessage";
 
+const {Company, VerifyEmail, User, UserDetails, Company_Employees, Employee} = db
+
 class AuthController {
-    async register(req:any, res:any){
-        try{
-            const email = await db.User.findOne({ where: { email: req.body.email } });
+    async register(req: any, res: any) {
+        try {
+            const email = await User.findOne({where: {email: req.body.email}});
             if (email && email?.is_verify) {
                 return res.status(400).json({
                     status: 400,
                     message: "Email address already in use!"
                 });
-            } else if (email){
+            } else if (email) {
                 return res.status(400).json({
                     status: 400,
                     message: "You already registry, please check your email for confirmation of your identity!"
@@ -21,21 +23,21 @@ class AuthController {
             }
 
             const bcryptPassword = await createBcrypt(req.body.password)
-            const user = await db.User.create({
+            const user = await User.create({
                 role: "owner",
                 email: req.body.email,
                 password: bcryptPassword,
             });
             await user.save()
 
-            const verify = await user.setVerify(new db.VerifyEmail({
+            const verify = await user.setVerify(new VerifyEmail({
                 email: user.email,
                 // code: codeGenerate(),
                 code: 1234
             }))
 
             // TODO: Edit this part
-            const details = await user.setDetails(new db.UserDetails({
+            await user.setDetails(new UserDetails({
                 ...req.body.userDetails
             }))
 
@@ -44,74 +46,74 @@ class AuthController {
                 message: "Verification code has been send in your email!",
                 data: ''
             })
-        }catch (error: any){
+        } catch (error: any) {
             console.log(error)
-            return  res.status(500).send({
+            return res.status(500).send({
                 status: 500,
                 message: error.message || "Error",
             })
         }
     }
 
-    async verifyUser(req: any, res: any){
-        try{
+    async verifyUser(req: any, res: any) {
+        try {
             const {code, email} = req.body
-            const verify = await db.VerifyEmail.findOne({ where: { email } });
+            const verify = await VerifyEmail.findOne({where: {email}});
 
-            if(!verify){
+            if (!verify) {
                 return res.status(200).send({
                     message: "Doesn't have verification this mail.",
                 });
-            }else if(verify?.code === "isActive"){
+            } else if (verify?.code === "isActive") {
                 return res.status(200).send({
                     message: "You already verified.",
                 });
-            }else if (verify?.code === code){
-                await db.User.update(
-                      { is_verify: new Date() },
-                    { where: {email} }
+            } else if (verify?.code === code) {
+                await User.update(
+                    {is_verify: new Date()},
+                    {where: {email}}
                 )
                 verify.code = "isActive";
                 await verify.save()
                 // DELETE this row
-                // await db.VerifyEmail.destroy({ where: { email } })
+                // await VerifyEmail.destroy({ where: { email } })
 
                 return res.status(200).send({
                     status: 200,
                     message: "You are verified",
                     data: ""
                 });
-            }else {
+            } else {
                 return res.status(200).send({
                     status: 400,
                     message: "Your code is no correct",
                 });
             }
-            }catch (error: any){
-                console.log(error)
-                return  res.status(500).send({
-                    status: 500,
-                    message: error.message || "Error",
+        } catch (error: any) {
+            console.log(error)
+            return res.status(500).send({
+                status: 500,
+                message: error.message || "Error",
             })
         }
     }
 
-    async signIn(req: any, res: any){
-        try{
-            const { email, password } = await req.body;
+    async signIn(req: any, res: any) {
+        try {
+            const {email, password} = await req.body;
 
-            const user = await db.User.scope('deleted').findOne({ where:{ email }})
+            const user = await User.scope('deleted').findOne({where: {email}})
             // 1. CHECK Valid fields in VALIDATOR
             // 2. CHECK User
             // 3. CHECK email verify or not
             // 4. CHECK password valid or not
             // 5. CREATE User Token
-            if(!user){
+            if (!user) {
                 return res.status(401).send({
                     message: "You have entered an invalid email or password",
-                    status:401,
+                    status: 401,
                 })
-            }else if(!user.is_verify){
+            } else if (!user.is_verify) {
                 return res.status(401).send({
                     message: "The account is not active. Please check your email.",
                     status: 401,
@@ -119,7 +121,7 @@ class AuthController {
             }
 
             const validPassword = await bcrypt.compare(password, user.password);
-            if (!validPassword){
+            if (!validPassword) {
                 return res.status(401).send({
                     message: "Password not valid.",
                     status: 401
@@ -127,28 +129,37 @@ class AuthController {
             }
             const userToken = jwtGenerator(user.id)
 
-            const companies = await db.Company.findOne({where: {user_id: user.id}});
-            const company = companies?.id
+            const findCompany = { company: null }
+
+            if (user.role === "owner") {
+                const companies = await Company.findOne({where: {user_id: user.id}});
+                findCompany.company = companies?.id
+            } else if (user.role === "admin") {
+                const employee = await Employee.findOne({where: {user_id: user.id}});
+                const companies = await Company_Employees.findOne({where: {employeeId: employee.id}});
+                findCompany.company = companies?.companyId
+            }
 
             return res.status(200).send({
                 status: 200,
                 message: "Sign in success.",
                 data: {
                     userToken,
-                    company,
+                    company: findCompany.company,
                 }
             })
-        }catch (error: any){
+        } catch (error: any) {
             console.log(error)
-            return  res.status(500).send({
+            return res.status(500).send({
                 status: 500,
                 message: error.message || "Error",
             })
         }
     }
-    async isLogin(req: any, res: any){
+
+    async isLogin(req: any, res: any) {
         try {
-            const companies = await db.Company.findOne({where: {user_id: req.userId}});
+            const companies = await Company.findOne({where: {user_id: req.userId}});
             const company = companies?.id
 
             return res.status(200).send({
@@ -156,9 +167,9 @@ class AuthController {
                 message: "Is login.",
                 company
             })
-        }catch (error: any){
+        } catch (error: any) {
             console.log(error)
-            return  res.status(500).send({
+            return res.status(500).send({
                 status: 500,
                 message: error.message || "Error",
             })

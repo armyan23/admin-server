@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validLogin, validRegister, validVerify } from "../middleware/validRegister";
-import authorization from "../middleware/authorization";
+import { authorization } from "../middleware/authorization";
 import AuthController from "../controllers/authController";
 
 const authRoutes = Router();

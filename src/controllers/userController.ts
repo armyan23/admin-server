@@ -2,21 +2,32 @@ import db from "../../models";
 import bcrypt from "bcrypt";
 import {createBcrypt, createImage, deleteImage} from "../helper/helpers";
 
-const { User, UserDetails } = db
+const { User, UserDetails, Employee }  = db
 
 class UserController{
     async profileData(req: any, res: any){
         try {
             // TODO: Change This part
-            const user = await User.findByPk( req.userId);
-            const details = await UserDetails.findByPk( req.userId,{
-                attributes: ['birthDate', 'city', 'country','firstName','gender','lastName','phoneNumber','image'],
-            })
+            const { userId } = req
+            const user = await User.findByPk( userId);
+
+            let details = null
+
+            if (user.role === "owner") {
+                details = await UserDetails.findByPk( userId,{
+                    attributes: ['birthDate', 'city', 'country','firstName','gender','lastName','phoneNumber','image'],
+                })
+            } else  if (user.role === "admin") {
+                details = await Employee.findOne({
+                    where: {
+                        user_id: userId
+                    }
+                })
+            }
 
             return res.status(200).send({
                 status: 200,
                 message: "Success",
-                userId: req.userId,
                 data: {...user.dataValues, details}
             });
         }catch (err){

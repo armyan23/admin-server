@@ -1,6 +1,7 @@
 import db from "../../models";
-import {Op} from "sequelize";
-import {createImage, deleteImage} from "../helper/helpers";
+import { Op } from "sequelize";
+import { createBcrypt, createImage, deleteImage } from "../helper/helpers";
+import { sendMessage } from "../helper/sendMessage";
 
 const { Company, Employee, User } = db
 
@@ -8,31 +9,88 @@ class EmployeeController {
     async createEmployee(req: any, res: any){
         try {
             const {body, userId, companyId, files} = req
+            const {email, password, role } = body
 
-            const addEmployee = await Employee.create({
-                ...body,
-                creatorId: userId,
-                endWork: body.endWork === "null" ? null : body.endWork
-            })
-            await addEmployee.save()
+            delete body.password
 
-            const company = await Company.findByPk(companyId);
+            if (role === "admin") {
+                const user = await User.findOne({where: {email}})
 
-            // // 3. INSERT the association in Enrollments table
-            //    await student.addClass(classRow, { through: Enrollment });
-            await company.addEmployee(addEmployee,{
-                through:  {role: "employee"}
-            })
+                if (user) {
+                    return res.status(400).json({
+                        status: 400,
+                        message: "You cannot create admin with this mail because that this mail is used."
+                    })
+                }
 
-            if (files?.length > 0) {
-                await createImage(files, addEmployee.id, addEmployee,"employees")
+                // Add user in table
+                const bcryptPassword = await createBcrypt(password)
+                const addUser = await User.create({
+                    password: bcryptPassword,
+                    email,
+                    role,
+                })
+                await addUser.save();
+
+
+                // // Add Employee in table
+                const addEmployee = await Employee.create({
+                    ...body,
+                    creatorId: userId,
+                    user_id: addUser.id,
+                    endWork: body.endWork === "null" ? null : body.endWork,
+                })
+                await addEmployee.save()
+
+                if (files?.length > 0) {
+                    await createImage(files, addEmployee.id, addEmployee,"employees")
+                }
+
+                // // Add employee and company ID into ref table
+                const company = await Company.findByPk(companyId);
+                await company.addEmployee(addEmployee, {
+                    through:  { role }
+                })
+
+                const verify = await addUser.setVerify(new db.VerifyEmail({
+                    email,
+                    // code: helpers(),
+                    code: 1234,
+                }))
+
+                await sendMessage(res, verify, {
+                    status: 200,
+                    message: `Verification code has been send in this ${email} email!`,
+                    data: addEmployee
+                })
+            } else if (role === "employee") {
+                const addEmployee = await Employee.create({
+                    ...body,
+                    creatorId: userId,
+                    endWork: body.endWork === "null" ? null : body.endWork
+                })
+                await addEmployee.save()
+
+                const company = await Company.findByPk(companyId);
+                await company.addEmployee(addEmployee, {
+                    through:  { role }
+                })
+
+                if (files?.length > 0) {
+                    await createImage(files, addEmployee.id, addEmployee,"employees")
+                }
+
+                return res.status(200).json({
+                    status: 200,
+                    message: "Success",
+                    data: addEmployee
+                })
+            } else {
+                return res.status(400).json({
+                    status: 400,
+                    message: "Something went wrong",
+                })
             }
-
-            return res.status(200).json({
-                status: 200,
-                message: "Success",
-                data: addEmployee
-            })
         }catch (error: any){
             console.log(error);
             return  res.status(500).send({

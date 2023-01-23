@@ -1,5 +1,5 @@
 import {Router} from "express";
-import authorization from "../middleware/authorization";
+import { authorization } from "../middleware/authorization";
 import multerMiddleware from "../middleware/multer";
 import UserController from "../controllers/userController";
 
