@@ -20,6 +20,7 @@ module.exports = {
           model: "companies",
           key: 'id'
         },
+        onDelete: "cascade"
       },
       employee_id:{
         allowNull: false,
@@ -28,6 +29,7 @@ module.exports = {
           model: "employees",
           key: 'id'
         },
+        onDelete: "cascade"
       },
       created_at: {
         allowNull: false,

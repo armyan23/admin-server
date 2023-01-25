@@ -42,15 +42,26 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: false
       },
-      companyId:{
-        allowNull: false,
+      companyId: {
         type: DataTypes.INTEGER,
-        field: 'company_id'
+        allowNull: false,
+        unique: true,
+        field: 'company_id',
+        references: {
+          model: "companies",
+          key: "id",
+        },
+        onDelete: "Cascade",
       },
       employeeId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        field: 'employee_id'
+        field: 'employee_id',
+        references: {
+          model: "employees",
+          key: "id",
+        },
+        onDelete: "Cascade",
       },
       createdAt: {
         type: DataTypes.DATE,

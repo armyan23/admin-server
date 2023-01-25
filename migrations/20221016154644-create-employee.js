@@ -15,6 +15,7 @@ module.exports = {
           model: "users",
           key: "id"
         },
+        onDelete: "cascade"
       },
       creator_id: {
         type: Sequelize.INTEGER,
@@ -22,6 +23,7 @@ module.exports = {
           model: "users",
           key: "id"
         },
+        onDelete: "cascade"
       },
       first_name:{
         type: Sequelize.STRING,
@@ -72,6 +74,10 @@ module.exports = {
       },
       birth_date:{
         type: Sequelize.DATE,
+        allowNull: false,
+      },
+      salary:{
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       start_work:{

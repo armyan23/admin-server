@@ -48,6 +48,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
             allowNull: false,
             primaryKey: true,
             unique: true,
+            references: {
+                model: "users",
+                key: "id",
+            },
+            onDelete: "Cascade",
         },
         firstName: {
             type: DataTypes.STRING,

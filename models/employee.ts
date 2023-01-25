@@ -76,15 +76,22 @@ module.exports = (sequelize: any, DataTypes: any) => {
     Employee.init({
       user_id: {
         type: DataTypes.INTEGER,
+        unique: true,
         references: {
           model: "users",
           key: "id",
         },
-        unique: true,
+        onDelete: "Cascade",
       },
       creatorId: {
         type: DataTypes.INTEGER,
-        field: "creator_id"
+        field: "creator_id",
+        references: {
+          model: "users",
+          key: "id",
+        },
+        // TODO: CHECK THIS PART THROUGH ADMIN PAGE
+        // onDelete: "Cascade",
       },
       email:{
         type: DataTypes.STRING,

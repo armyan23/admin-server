@@ -30,16 +30,17 @@ class AuthController {
             });
             await user.save()
 
+            // TODO: Edit this part
+            await user.setDetails(new UserDetails({
+                ...req.body.userDetails
+            }))
+
             const verify = await user.setVerify(new VerifyEmail({
                 email: user.email,
                 // code: codeGenerate(),
                 code: 1234
             }))
 
-            // TODO: Edit this part
-            await user.setDetails(new UserDetails({
-                ...req.body.userDetails
-            }))
 
             await sendMessage(res, verify, {
                 status: 200,

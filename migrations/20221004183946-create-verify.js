@@ -11,7 +11,7 @@ module.exports = {
           model: "users",
           key: "id"
         },
-        // onDelete: "cascade"
+        onDelete: "cascade"
       },
       email: {
         type: Sequelize.STRING,

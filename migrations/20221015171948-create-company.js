@@ -9,6 +9,15 @@ module.exports = {
         autoIncrement: true,
         type: Sequelize.INTEGER,
       },
+      user_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id'
+        },
+        onDelete: "cascade"
+      },
       name_company: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -32,6 +41,9 @@ module.exports = {
       website: {
         type: Sequelize.STRING,
       },
+      created_date: {
+        type: Sequelize.DATE,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -41,13 +53,6 @@ module.exports = {
         type: Sequelize.DATE,
       }
     });
-
-    await queryInterface.addColumn('companies', 'user_id', {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: { model: 'users', key: 'id' },
-      // onDelete: "cascade"
-    })
   },
 
   async down(queryInterface, Sequelize) {

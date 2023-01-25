@@ -52,6 +52,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
             type: DataTypes.INTEGER,
             allowNull: false,
             unique: true,
+            references: {
+                model: "users",
+                key: "id",
+            },
+            onDelete: "Cascade",
         },
         nameCompany: {
             type: DataTypes.STRING,
@@ -81,7 +86,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
             type: DataTypes.STRING,
         },
         createdDate:{
-            allowNull: false,
             type: DataTypes.DATE,
             field: 'created_date'
         },
