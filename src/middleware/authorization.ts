@@ -1,5 +1,8 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import db from "../../models";
+
+const { User } = db
 
 dotenv.config();
 
@@ -14,8 +17,10 @@ export async function authorization(req: any, res: any, next: any) {
         }
 
         const payload: any = jwt.verify(jwtToken, `${process.env.JWT_SECRET}`);
+        const user = await User.findByPk( payload.id);
 
         req.userId = payload.id;
+        req.userRole = user.role;
 
         next()
     } catch (err) {
@@ -25,5 +30,3 @@ export async function authorization(req: any, res: any, next: any) {
         });
     }
 }
-
-export default authorization;

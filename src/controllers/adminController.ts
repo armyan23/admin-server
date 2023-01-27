@@ -1,21 +1,24 @@
 import db from "../../models";
-import {createBcrypt} from "../helper/helpers";
+import {createBcrypt, createImage} from "../helper/helpers";
 import {sendMessage} from "../helper/sendMessage";
 
-const { User, Employee, Company, Company_Employees } = db
+const { User, Employee, Company } = db
 
 class AdminController{
     async createAdmin(req: any, res: any){
         try {
 
-            const {email, password, role, employee } = req.body
-            const user = await User.findOne({where: {email}})
-            const createdBy = await User.findByPk(req.userId)
+            const {body, userId, companyId, files} = req
+            const {email, password, role } = body
 
-            if(user){
+            delete body.password
+
+            const user = await User.findOne({where: {email}})
+
+            if (user) {
                 return res.status(400).json({
                     status: 400,
-                    message: "You cannot create this mail because that this mail is used."
+                    message: "You cannot create admin with this mail because that this mail is used."
                 })
             }
 
@@ -28,33 +31,35 @@ class AdminController{
             })
             await addUser.save();
 
-            // Add Employee in table
+            // // Add Employee in table
             const addEmployee = await Employee.create({
-                ...employee,
-                // endWork: body.endWork === "null" ? null : body.endWork,
-                creatorId: req.userId,
-                user_id: addUser.id
+                ...body,
+                creatorId: userId,
+                user_id: addUser.id,
+                endWork: body.endWork === "null" ? null : body.endWork,
             })
             await addEmployee.save()
 
-            // Add employee and company ID into ref table
-            const company = await Company.findByPk(req.companyId);
-            await company.addEmployee(addEmployee,{
-                through:  {
-                    role
-                }
+            if (files?.length > 0) {
+                await createImage(files, addEmployee.id, addEmployee,"employees")
+            }
+
+            // // Add employee and company ID into ref table
+            const company = await Company.findByPk(companyId);
+            await company.addEmployee(addEmployee, {
+                through:  { role }
             })
 
-            // Add Verify in table
             const verify = await addUser.setVerify(new db.VerifyEmail({
                 email,
                 // code: helpers(),
                 code: 1234,
             }))
+
             await sendMessage(res, verify, {
                 status: 200,
                 message: `Verification code has been send in this ${email} email!`,
-                data: ''
+                data: addEmployee
             })
         }catch (error: any){
             console.log(error)
@@ -67,7 +72,9 @@ class AdminController{
     async getAdmin(req: any, res: any){
         try {
             const admins = await Company.findOne({
-                where: {id: req.companyId},
+                where: {
+                    id: req.companyId,
+                },
                 include: {
                     model: Employee,
                     as: "Employee",
@@ -82,20 +89,9 @@ class AdminController{
                     // }
                 }
             })
-            // const company = await Company.findOne({
-            //     where: {
-            //         id: req.companyId,
-            //     },
-            //     include: {
-            //         model: Employee,
-            //         as: "Employee"
-            //     }
-            // })
             return res.status(200).send({
-                admins: admins.Employee,
+                data: admins.employee,
                 status: 200,
-                message: "Success",
-                // body: req.body
             });
         }catch (error: any){
             console.log(error)

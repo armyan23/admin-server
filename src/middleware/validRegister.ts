@@ -3,19 +3,21 @@ import {
     validCheckPassword,
 } from "../helper/valid";
 
-async function validRegister(req: any, res: any, next: Function) {
+export async function validRegister(req: any, res: any, next: Function) {
     const { email, password, confirmPassword } = req.body;
 
-    const validInfoEmail = validCheckEmail(email);
-    const validInfoPassword = validCheckPassword(password, confirmPassword);
-
-    // TODO: CREATE EVERY BOOLEAN GLOBAL FUNCTION
     if (![email, password, confirmPassword].every(Boolean)) {
         return res.status(400).json({
             status: 400,
             message:"Missing Credentials!"
         });
-    }else if (validInfoEmail) {
+    }
+
+    const validInfoEmail = validCheckEmail(email);
+    const validInfoPassword = validCheckPassword(password, confirmPassword);
+
+    // TODO: CREATE EVERY BOOLEAN GLOBAL FUNCTION
+    if (validInfoEmail) {
         return res.status(validInfoEmail.status).json(validInfoEmail);
     }else if (validInfoPassword) {
         return res.status(validInfoPassword.status).json(validInfoPassword);
@@ -24,7 +26,7 @@ async function validRegister(req: any, res: any, next: Function) {
     next();
 };
 
-async function validVerify(req: any, res: any, next: Function) {
+export async function validVerify(req: any, res: any, next: Function) {
     // TODO: email or other field. WHEN SEND REQUEST FOR VERIFY EMAIL
     const { email, code } = req.body;
 
@@ -38,7 +40,7 @@ async function validVerify(req: any, res: any, next: Function) {
     next();
 };
 
-async function validLogin(req: any, res: any, next: Function) {
+export async function validLogin(req: any, res: any, next: Function) {
     const { email, password } = req.body;
 
     const validInfoEmail = validCheckEmail(email);
@@ -54,6 +56,3 @@ async function validLogin(req: any, res: any, next: Function) {
 
     next();
 };
-
-
-export  { validRegister, validVerify, validLogin};
