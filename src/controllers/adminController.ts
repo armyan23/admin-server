@@ -9,7 +9,7 @@ class AdminController{
         try {
 
             const {body, userId, companyId, files} = req
-            const {email, password, role } = body
+            const {email, password } = body
 
             delete body.password
 
@@ -27,13 +27,14 @@ class AdminController{
             const addUser = await User.create({
                 password: bcryptPassword,
                 email,
-                role,
+                role: "admin",
             })
             await addUser.save();
 
             // // Add Employee in table
             const addEmployee = await Employee.create({
                 ...body,
+                role: "admin",
                 creatorId: userId,
                 user_id: addUser.id,
                 endWork: body.endWork === "null" ? null : body.endWork,
@@ -47,7 +48,7 @@ class AdminController{
             // // Add employee and company ID into ref table
             const company = await Company.findByPk(companyId);
             await company.addEmployee(addEmployee, {
-                through:  { role }
+                through:  { role: "admin" }
             })
 
             const verify = await addUser.setVerify(new db.VerifyEmail({
@@ -69,6 +70,26 @@ class AdminController{
             })
         }
     }
+    async deleteAdmin(req: any, res: any){
+        try {
+            const { id } =  req?.params
+
+            // await Employee.update({
+            //     endWork: new Date()
+            // },{where: {id: id}})
+
+            return res.status(200).json({
+                status: 200,
+                message: "Success",id
+            })
+        }catch (error: any){
+            console.log(error);
+            return  res.status(500).send({
+                status: 500,
+                message: error.message || "Error",
+            })
+        }
+    }
     async getAdmin(req: any, res: any){
         try {
             const admins = await Company.findOne({
@@ -77,16 +98,8 @@ class AdminController{
                 },
                 include: {
                     model: Employee,
-                    as: "Employee",
-                    where:{ role: "admin" },
-                    // include:{
-                    //     model: Company_Admins,
-                    //     as: "Admin",
-                    //     include: {
-                    //         model: User,
-                    //         as: "User"
-                    //     }
-                    // }
+                    as: "employee",
+                    where: { role: "admin" },
                 }
             })
             return res.status(200).send({

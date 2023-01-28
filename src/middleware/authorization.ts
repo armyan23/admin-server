@@ -17,10 +17,12 @@ export async function authorization(req: any, res: any, next: any) {
         }
 
         const payload: any = jwt.verify(jwtToken, `${process.env.JWT_SECRET}`);
-        const user = await User.findByPk( payload.id);
+        const user = await User.findByPk(payload.id,{
+            attributes: ['id', 'role'],
+        });
 
         req.userId = payload.id;
-        req.userRole = user.role;
+        req.user = user;
 
         next()
     } catch (err) {

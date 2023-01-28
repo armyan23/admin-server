@@ -8,10 +8,10 @@ class EmployeeController {
     async createEmployee(req: any, res: any){
         try {
             const {body, userId, companyId, files} = req
-            const { role } = body
 
             const addEmployee = await Employee.create({
                 ...body,
+                role: "employee",
                 creatorId: userId,
                 endWork: body.endWork === "null" ? null : body.endWork
             })
@@ -19,7 +19,7 @@ class EmployeeController {
 
             const company = await Company.findByPk(companyId);
             await company.addEmployee(addEmployee, {
-                through:  { role }
+                through:  { role: "employee" }
             })
 
             if (files?.length > 0) {
@@ -102,9 +102,15 @@ class EmployeeController {
     async updateEmployee(req: any, res: any){
         try {
             const { id } =  req?.params
-            const { body, files } =  req
-
+            const {body, files, user} = req
             const employee = await Employee.findByPk(id)
+
+            if (user.role !== "owner" && employee.role == "admin") {
+                return res.status(401).json({
+                    status: 401,
+                    message: "You can't edit this employee.",
+                })
+            }
 
             await employee.update({
                 ...body,
