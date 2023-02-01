@@ -1,6 +1,7 @@
 import db from "../../models";
 import {createBcrypt, createImage} from "../helper/helpers";
 import {sendMessage} from "../helper/sendMessage";
+import {validCheckPassword} from "../helper/valid";
 
 const { User, Employee, Company } = db
 
@@ -70,28 +71,6 @@ class AdminController{
             })
         }
     }
-    async deleteAdmin(req: any, res: any){
-        try {
-            const { id } =  req?.params
-
-            const employee = await Employee.findByPk(id)
-            const user = await User.findByPk(employee.user_id)
-
-            await employee.update({ role: "employee" })
-            await user.update({ deletedAt: new Date() })
-
-            return res.status(200).json({
-                status: 200,
-                message: "Success",
-            })
-        }catch (error: any){
-            console.log(error);
-            return  res.status(500).send({
-                status: 500,
-                message: error.message || "Error",
-            })
-        }
-    }
     async getAdmin(req: any, res: any){
         try {
             const admins = await Company.findOne({
@@ -110,6 +89,66 @@ class AdminController{
             });
         }catch (error: any){
             console.log(error)
+            return  res.status(500).send({
+                status: 500,
+                message: error.message || "Error",
+            })
+        }
+    }
+    async changeAdminPassword(req: any, res: any){
+        try {
+            const { id } =  req?.params
+            const { password, confirmPassword } = req.body;
+
+           const validInfoPassword = validCheckPassword(password, confirmPassword);
+
+           if (validInfoPassword) {
+                return res.status(validInfoPassword.status).json(validInfoPassword);
+            }
+
+            const employee = await Employee.findByPk(id);
+            const user = await User.findByPk(employee.user_id);
+
+            if (password !== confirmPassword){
+                return res.status(400).send({
+                    status: 400,
+                    message: "Passwords did not match.",
+                });
+            }
+            const changePassword = await createBcrypt(password)
+
+            await user.update({
+                password: changePassword
+            })
+
+            return res.status(200).send({
+                status: 200,
+                message: "Your Admin password has been changed",
+            });
+        }catch (error: any){
+            console.log(error);
+            return  res.status(500).send({
+                status: 500,
+                message: error.message || "Error",
+            })
+        }
+    }
+    async deleteAdmin(req: any, res: any){
+        try {
+            const { id } =  req?.params
+
+            const employee = await Employee.findByPk(id)
+            const user = await User.findByPk(employee.user_id)
+
+            await employee.update({ role: "employee" })
+            await user.update({ deletedAt: new Date() })
+
+            return res.status(200).json({
+                status: 200,
+                message: "Success",
+            })
+        }catch (error: any){
+            console.log(error);
             return  res.status(500).send({
                 status: 500,
                 message: error.message || "Error",

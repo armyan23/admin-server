@@ -11,6 +11,7 @@ adminRoutes.use("/", authorization, authCompany);
 
 adminRoutes.post("/", multerMiddleware, validRegister, adminController.createAdmin);
 adminRoutes.get("/", adminController.getAdmin);
+adminRoutes.put("/:id", adminController.changeAdminPassword);
 adminRoutes.delete("/:id", adminController.deleteAdmin);
 
 export default adminRoutes;

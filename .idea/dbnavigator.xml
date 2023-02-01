@@ -17,14 +17,14 @@
       <scope value="GLOBAL" />
       <destination value="FILE" />
       <format value="EXCEL" />
-      <charset value="UTF-8" />
-      <charset value="UTF-8" />
+      <charset value="windows-1252" />
+      <charset value="windows-1252" />
     </export-instructions>
   </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
-    <autoscroll-to-editor value="false" />
+    <autoscroll-to-editor value="true" />
     <autoscroll-from-editor value="true" />
-    <show-object-properties value="true" />
+    <show-object-properties value="false" />
     <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
@@ -35,7 +35,7 @@
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files>
       <object connection-id="76375bae-da3e-403e-90b4-c94f4965993d" object-ref="schemas/public/tables/users" />
-      <object connection-id="76375bae-da3e-403e-90b4-c94f4965993d" object-ref="schemas/public/tables/companies" />
+      <object connection-id="76375bae-da3e-403e-90b4-c94f4965993d" object-ref="schemas/public/tables/employees" />
     </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
@@ -48,6 +48,7 @@
     <filter-actions connection-id="76375bae-da3e-403e-90b4-c94f4965993d" dataset="public.verifies" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="76375bae-da3e-403e-90b4-c94f4965993d" dataset="public.SequelizeMeta" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="76375bae-da3e-403e-90b4-c94f4965993d" dataset="public.user_details" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="76375bae-da3e-403e-90b4-c94f4965993d" dataset="public.company_employees" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
