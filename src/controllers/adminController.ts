@@ -74,13 +74,15 @@ class AdminController{
         try {
             const { id } =  req?.params
 
-            // await Employee.update({
-            //     endWork: new Date()
-            // },{where: {id: id}})
+            const employee = await Employee.findByPk(id)
+            const user = await User.findByPk(employee.user_id)
+
+            await employee.update({ role: "employee" })
+            await user.update({ deletedAt: new Date() })
 
             return res.status(200).json({
                 status: 200,
-                message: "Success",id
+                message: "Success",
             })
         }catch (error: any){
             console.log(error);

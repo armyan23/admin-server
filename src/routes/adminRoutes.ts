@@ -9,8 +9,8 @@ const adminRoutes = Router();
 
 adminRoutes.use("/", authorization, authCompany);
 
-adminRoutes.post("/create", multerMiddleware, validRegister, adminController.createAdmin);
-adminRoutes.get("/all", adminController.getAdmin);
+adminRoutes.post("/", multerMiddleware, validRegister, adminController.createAdmin);
+adminRoutes.get("/", adminController.getAdmin);
 adminRoutes.delete("/:id", adminController.deleteAdmin);
 
 export default adminRoutes;
